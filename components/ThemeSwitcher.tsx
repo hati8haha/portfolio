@@ -19,7 +19,7 @@ export const ThemeSwitcher = () => {
       className={`w-fit p-2`}
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
     >
-      {theme === "light" ? <DarkIcon  /> : <LightIcon  fill="#fff" />}
+      {theme === "light" ? <DarkIcon fill="#0b0f14" /> : <LightIcon  fill="#f5f7fa" />}
     </button>
   );
 };

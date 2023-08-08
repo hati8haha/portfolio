@@ -42,7 +42,10 @@ const Experience = ({children}: PropsWithChildren ) => {
           </span>
         </p>
       </motion.div>}
+      <div className='flex flex-col gap-4'>
       {children}
+
+      </div>
     </section>
   )
 }

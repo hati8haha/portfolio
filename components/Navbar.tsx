@@ -7,12 +7,12 @@ const Navbar = () => {
   const [navbar, setNavbar] = useState(false)
 
   return (
-    <nav className='w-full bg-gradient-to-b from-zinc-200 dark:bg-zinc-800/30 dark:from-inherit shadow'>
+    <nav className='w-full drop-shadow-md shadow-bunker-100  bg-bunker-200 dark:bg-bunker-900'>
       <div className='justify-between px-4 mx-auto lg:max-w-7xl md:items-center md:flex md:px-8'>
         <div>
           <div className='flex items-center justify-between py-3 md:py-5 md:block'>
             <Link href='/'>
-              <h2 className='text-2xl text-black dark:text-white font-bold font-mono'>Haoting Cheng</h2>
+              <h2 className='text-2xl text-bunker-900 dark:text-bunker-50 font-bold font-mono'>Haoting Cheng</h2>
             </Link>
             <div className='md:hidden'>
               <button
@@ -22,7 +22,7 @@ const Navbar = () => {
                 {navbar ? (
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
-                    className='w-6 h-6  text-black dark:text-white'
+                    className='w-6 h-6  text-bunker-900 dark:text-white'
                     viewBox='0 0 20 20'
                     fill='currentColor'
                   >
@@ -35,7 +35,7 @@ const Navbar = () => {
                 ) : (
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
-                    className='w-6 h-6 text-black dark:text-white'
+                    className='w-6 h-6 text-bunker-900 dark:text-white'
                     fill='none'
                     viewBox='0 0 24 24'
                     stroke='currentColor'
@@ -59,19 +59,19 @@ const Navbar = () => {
             }`}
           >
             <ul className='items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0'>
-              <li className='text-black dark:text-white font-mono'>
+              <li className='text-bunker-900 dark:text-white font-mono'>
                 <Link href='/'>Home</Link>
               </li>
-              <li className='text-black dark:text-white font-mono'>
+              <li className='text-bunker-900 dark:text-white font-mono'>
                 <Link href='/posts'>Blog</Link>
               </li>
-              <li className='text-black dark:text-white font-mono'>
+              <li className='text-bunker-900 dark:text-white font-mono'>
                 <Link href='/posts'>Portfolio</Link>
               </li>
-              <li className='text-black dark:text-white font-mono'>
+              <li className='text-bunker-900 dark:text-white font-mono'>
                 <Link href='/about'>About</Link>
               </li>
-              <li className='text-black dark:text-white font-mono'>
+              <li className='text-bunker-900 dark:text-white font-mono'>
 <ThemeSwitcher />              </li>
             </ul>
           </div>

@@ -12,7 +12,7 @@ interface ExperienceCardProps {
 
 const ExperienceCard = ({jobTitle, employmentType, duration, company, desc, image, companyLink}: ExperienceCardProps) => {
   return (
-    <div className="p-4 shadow-md bg-slate-800 rounded-xl bg-opacity-60 grid">
+    <div className="p-4 shadow  rounded bg-opacity-60 grid dark:shadow-slate hover:shadow-md transition-all">
 <h3>{jobTitle}</h3>
 <div>{employmentType}</div>
 <div>{duration}</div>

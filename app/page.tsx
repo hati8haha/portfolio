@@ -6,7 +6,7 @@ import jobs from './sections/jobsData.json'
 import ExperienceCard from './sections/ExperienceCard'
 export default function Home() {
   return (
-    <main className='flex flex-col items-center justify-between p-8 xl:p-24'>
+    <main className='flex flex-col items-center justify-between p-8 xl:p-24 dark:bg-bunker-950 bg-bunker-100'>
       <section className='flex justify-center items-center w-full h-screen'>
         <div className='-translate-y-48'>
           <p className='text-3xl sm:text-5xl md:text-6xl  animate-fade-right animate-once animate-delay-[500ms]'>

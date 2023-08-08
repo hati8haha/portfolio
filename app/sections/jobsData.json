@@ -1,0 +1,18 @@
+[
+  {
+    "jobTitle": "Developer Programs Engineer",
+    "employmentType": "Contract via Virtusa",
+    "duration": "10/2022 ~ now",
+    "company": "Google",
+    "desc": [
+      "• Coached over 400 developers worldwide in the Google Smart Home and Matter development through Google Issue Tracker, resolving more than 100 issues each quarter.",
+      "• Implemented Service Level Objectives (SLOs), leading to an 85% reduction in response time for the Issue Tracker.",
+      "• Enhanced workflow efficiency by integrating new tools, saving 15% of time on routine tasks.",
+      "• Reported and tracked bugs, bridging communication gaps between internal team engineers and third-party developers.",
+      "• Contributed to enhancing developer tools and public documentation on Google Home Developer Center.",
+      "• Supported Google Smart Home certification team in processing certificate requests, including cloud-to-cloud and Matter."
+    ],
+    "image": "string",
+    "companyLink": "string"
+  }
+]

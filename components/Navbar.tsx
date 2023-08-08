@@ -7,7 +7,7 @@ const Navbar = () => {
   const [navbar, setNavbar] = useState(false)
 
   return (
-    <nav className='w-screen bg-gradient-to-b from-zinc-200 dark:bg-zinc-800/30 dark:from-inherit shadow'>
+    <nav className='w-full bg-gradient-to-b from-zinc-200 dark:bg-zinc-800/30 dark:from-inherit shadow'>
       <div className='justify-between px-4 mx-auto lg:max-w-7xl md:items-center md:flex md:px-8'>
         <div>
           <div className='flex items-center justify-between py-3 md:py-5 md:block'>

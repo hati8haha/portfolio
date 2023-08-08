@@ -1,20 +1,30 @@
 'use client'
-import { motion } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
 import Image from 'next/image'
+import { useRef, PropsWithChildren } from 'react'
 
-const Experience = () => {
+const Experience = ({children}: PropsWithChildren ) => {
+  const ref  = useRef(null)
+  const isInView = useInView(ref, {once: true})
+  const spring = {
+    type: "spring",
+    damping: 10,
+    stiffness: 100
+  }
+
   return (
     <section className='max-w-xl my-16	'>
+
       <h2 className='text-3xl sm:text-5xl md:text-6xl '>Experience</h2>
 
-      <motion.div
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{
-          type: 'spring',
-          stiffness: 260,
-          damping: 20
+      {<motion.div
+        initial={{opacity: 0}}
+        transition={spring}
+        animate={{
+          opacity: isInView ? 1 :0,
         }}
+        
+        ref={ref}
       >
         <p className='text-xl leading-8'>
           <span className=''>In my career, I've been lucky to work at </span>
@@ -31,7 +41,8 @@ const Experience = () => {
             Google Developer community. 😄
           </span>
         </p>
-      </motion.div>
+      </motion.div>}
+      {children}
     </section>
   )
 }

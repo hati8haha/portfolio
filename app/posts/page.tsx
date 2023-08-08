@@ -5,9 +5,8 @@ export default async function Page() {
   const posts = await getAllPosts()
 
   return (
-    <div>
+    <main className='px-24 py-16 flex flex-col w-screen items-center'>
       <h1>My blog</h1>
-
       <h2>All posts:</h2>
       <ul>
         {posts.map(post => {
@@ -21,6 +20,6 @@ export default async function Page() {
           )
         })}
       </ul>
-    </div>
+    </main>
   )
 }

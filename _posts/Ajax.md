@@ -5,6 +5,8 @@ tags:
 categories:
 - 前端
 - JavaScript
+date: 2021-05-11
+
 ---
 ## 什麼是 Ajax？
 Ajax 全名是 Asynchronous JavaScript and XML，指的是非同步的 JavaScript 與 XML。

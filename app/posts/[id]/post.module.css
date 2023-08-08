@@ -1,0 +1,39 @@
+h2, h3, h4, h5, h6  {
+  position: relative;
+}
+
+h2 {
+  font-size: x-large;
+  margin: 0.5rem 0;
+  font-weight: bold;
+}
+
+h3 {
+  font-size: large;
+  margin: 0.5rem 0;
+
+}
+
+code {
+  background-color: #e0f8ff4d;
+  border-radius: 4px;
+  padding: 0.1rem 0.2rem;
+  font-size: 0.8rem;
+}
+
+.link-headings {
+  position: absolute;
+  color: lightgray;
+  left: -1rem; 
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.link-headings:hover {
+  opacity: 1;
+}
+
+p {
+  margin: 1rem 0;
+}
+

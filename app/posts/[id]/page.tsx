@@ -1,3 +1,4 @@
+// import styles from './post.module.css'
 import { getPostById, getAllPosts } from '@/lib/api'
 
 // Generate the post, note that this is a "react server component"! it is
@@ -9,11 +10,14 @@ export default async function Post({
 }) {
   const { html, title, date } = await getPostById(id)
   return (
-    <article>
-      <h1>{title}</h1>
-      <h4>{date}</h4>
+    <main className={`px-8 py-16 flex flex-col w-screen items-center xs:px-24 `}>
+    <article className='xl:max-w-3xl max-w-8/12' >
+      <h1 className='text-3xl font-bold mb-4'>{title}</h1>
+      {date && date !== 'undefined' && <h4>{date}</h4>}
       <div dangerouslySetInnerHTML={{ __html: html }} />
     </article>
+    </main>
+
   )
 }
 

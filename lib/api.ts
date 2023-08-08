@@ -32,7 +32,7 @@ async function getParserPre() {
         tagName: 'a',
         properties: {
           href: '#' + arg.properties?.id,
-          style: 'margin-right: 10px',
+          style: 'opacity: 0; visibility: hidden; width: 0;',
         },
         children: [{ type: 'text', value: '#' }],
       }),

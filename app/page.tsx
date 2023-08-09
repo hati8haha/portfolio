@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Experience from './sections/Experience'
 import jobs from './sections/jobsData.json'
 import ExperienceCard from './sections/ExperienceCard'
+import OnScrollInViewAnimation from '@/components/motion/OnScrollInViewAnimation'
 export default function Home() {
   return (
     <main className='flex flex-col items-center justify-between p-8 xl:p-24 dark:bg-bunker-950 bg-bunker-100'>
@@ -24,7 +25,9 @@ export default function Home() {
 
       <Experience>
         {jobs.map((job, i) => (
+          <OnScrollInViewAnimation initial={{ opacity: 0, x: (i%2=== 0) ? -60 : 60 }}  animate={{ opacity: 1, x:0 }}>
           <ExperienceCard key={i} {...job} />
+          </OnScrollInViewAnimation>
         ))}
 
       </Experience>

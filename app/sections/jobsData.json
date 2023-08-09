@@ -12,7 +12,7 @@
       "• Contributed to enhancing developer tools and public documentation on Google Home Developer Center.",
       "• Supported Google Smart Home certification team in processing certificate requests, including cloud-to-cloud and Matter."
     ],
-    "image": "https://media.licdn.com/dms/image/D560BAQGEPXDEIb7QDA/company-logo_200_200/0/1682334527897?e=1699488000&v=beta&t=o4rgUhvM1fSjC0N0vi6gwf_6WcKR1rX68SviVI7EejE",
+    "image": "/google-company-logo.svg",
     "companyLink": "https://www.virtusa.com/"
   },
   {
@@ -28,7 +28,7 @@
       "• Created a Discord bot to boost streamer-fan interaction.",
       "• Played a key role in optimizing frontend and backend architecture and database design."
     ],
-    "image": "https://deerdonate.herokuapp.com/logo_icon_green.svg",
+    "image": "/valleydeer-company-logo.png",
     "companyLink": "https://deerdonate.herokuapp.com/"
   },
   {
@@ -44,23 +44,7 @@
       "• Migrated legacy projects to Next.js, MUI and Docker, resulting in faster page load times and an enhanced user experience.",
       "• Implemented pre-commit hooks (Prettier, commitlint) for consistent code style and enhanced collaboration within the team."
     ],
-    "image": "https://media.licdn.com/dms/image/C510BAQH6rRoyhaCG1Q/company-logo_200_200/0/1550566271472?e=1699488000&v=beta&t=ZiYTp6MQR3R-3nNm5n8pIhRK-iv4NIt-QuNkzUzoFRo",
-    "companyLink": "string"
-  },
-  {
-    "jobTitle": "Developer Programs Engineer",
-    "employmentType": "Contract via Virtusa",
-    "duration": "10/2022 ~ now",
-    "company": "Google",
-    "desc": [
-      "• Coached over 400 developers worldwide in the Google Smart Home and Matter development through Google Issue Tracker, resolving more than 100 issues each quarter.",
-      "• Implemented Service Level Objectives (SLOs), leading to an 85% reduction in response time for the Issue Tracker.",
-      "• Enhanced workflow efficiency by integrating new tools, saving 15% of time on routine tasks.",
-      "• Reported and tracked bugs, bridging communication gaps between internal team engineers and third-party developers.",
-      "• Contributed to enhancing developer tools and public documentation on Google Home Developer Center.",
-      "• Supported Google Smart Home certification team in processing certificate requests, including cloud-to-cloud and Matter."
-    ],
-    "image": "string",
+    "image": "/nadi-company-logo.png",
     "companyLink": "string"
   }
 ]

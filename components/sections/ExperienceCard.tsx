@@ -19,7 +19,7 @@ const ExperienceCard = ({
 }: ExperienceCardProps) => {
   return (
     <div
-      className={`border border-gray-300 rounded-lg shadow-md bg-bunker-50 dark:bg-gray-800 dark:border-gray-700 relative overflow-hidden `}
+      className={`border border-gray-300 rounded-lg shadow-md bg-gray-50 dark:bg-gray-800 dark:border-gray-700 relative overflow-hidden `}
     >
       <img
         src={image}

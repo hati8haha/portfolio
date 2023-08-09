@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { ThemeSwitcher } from './ThemeSwitcher'
 
 const Navbar = () => {

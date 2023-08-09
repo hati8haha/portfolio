@@ -1,5 +1,5 @@
 'use client'
-import { AnimationProps, VariantLabels, motion, useInView } from 'framer-motion'
+import { AnimationProps, motion, useInView } from 'framer-motion'
 import { PropsWithChildren, useRef } from 'react'
 
 interface OnScrollFadeInProps  {
@@ -25,7 +25,6 @@ const OnScrollInViewAnimation = ({ children,
       transition={transition}
       animate={isInView && animate}
       ref={ref}
-      
     >
       {children}
     </motion.div>

@@ -1,9 +1,8 @@
 import Image from 'next/image'
-import ParallaxText from '@/components/ParallaxText'
 import Link from 'next/link'
-import Experience from './sections/Experience'
-import jobs from './sections/jobsData.json'
-import ExperienceCard from './sections/ExperienceCard'
+import Experience from '../components/sections/Experience'
+import jobs from '../components/sections/jobsData.json'
+import ExperienceCard from '../components/sections/ExperienceCard'
 import OnScrollInViewAnimation from '@/components/motion/OnScrollInViewAnimation'
 export default function Home() {
   return (
@@ -25,11 +24,10 @@ export default function Home() {
 
       <Experience>
         {jobs.map((job, i) => (
-          <OnScrollInViewAnimation initial={{ opacity: 0, x: (i%2=== 0) ? -60 : 60 }}  animate={{ opacity: 1, x:0 }}>
+          <OnScrollInViewAnimation initial={{ opacity: 0, x: -60  }}  animate={{ opacity: 1, x:0 }}>
           <ExperienceCard key={i} {...job} />
           </OnScrollInViewAnimation>
         ))}
-
       </Experience>
 
       <div className='mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left'></div>

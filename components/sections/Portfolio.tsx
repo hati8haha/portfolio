@@ -55,51 +55,51 @@ interface PortfolioCardProps {
 interface PortfolioCardExpandProps {
   title: string
   images: string[]
-  link: string
+  link?: string
   description: string
   techStack: TechStackType[]
 }
 
-const images = [
-  'deerdonate-feature1.png',
-  'donate-behavior1.gif',
-  'donate-behavior2.gif',
-  'meal-time-demo.png'
-]
-
 const projects: ProjectData[] = [
   {
     title: 'Deer Donate',
-    coverImage: 'deerdonate-feature1.png',
+    coverImage: 'deerdonate-notification.webp',
     shortDescription:
       'Leveling up livestreams! Real-time donations, transactions without the headache, and gamified interactions.',
     techStack: ['React', 'TypeScript', 'Styled-components', 'Serverless'],
     description:
       'Leveling up livestreams! Real-time donations, transactions without the headache, and gamified interactions.',
     images: [
-      'deerdonate-feature1.png',
-      'donate-behavior1.gif',
-      'donate-behavior2.gif',
-      'meal-time-demo.png'
+      'deerdonate-gift.webp',
+      'deerdonate-donate.gif',
+      'deerdonate-notification.webp',
+      'deerdonate-demo1.png',
+      'deerdonate-demo2.gif',
+      'deerdonate-feature1.png'
     ]
   },
   {
     title: 'Deer Donate Console',
-    coverImage: 'donate-behavior1.gif',
+    coverImage: 'sakut-console-behavior2.gif',
     shortDescription:
       'Live stream insights: Fan donations, dynamic charts, gaming stats, and custom notifications, all in one platform.',
     description: 'desc',
     techStack: ['React', 'TypeScript', 'Styled-components', 'Serverless'],
-    images: [],
+    images: [
+      'sakut-console-login.png',
+      'sakut-console-behavior1.gif',
+      'sakut-console-behavior2.gif',
+      'sakut-console-table2.gif'
+    ],
     link: 'https://sakut-console.herokuapp.com/Login'
   },
   {
     title: 'NADI Membership platform',
-    coverImage: 'donate-behavior2.gif',
+    coverImage: 'nadi-soc1.png',
     shortDescription: '',
     techStack: ['React', 'TypeScript', 'Styled-components', 'Serverless'],
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    images: [],
+    images: ['nadi-soc1.png', 'nadi-soc2.png', 'nadi-soc3.png'],
     link: 'https://example.com/project1'
   },
   {
@@ -110,7 +110,7 @@ const projects: ProjectData[] = [
       'Blending geo-info, 3D models, and visuals into an intuitive platform that gives you a city or global scope at your fingertips.',
     techStack: ['React', 'TypeScript', 'Styled-components', 'Serverless'],
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    images: []
+    images: ['giap-demo1.png', 'GIAP.gif']
   },
   {
     title: 'Meal Time',
@@ -118,8 +118,33 @@ const projects: ProjectData[] = [
     shortDescription:
       'Turning surplus into supper! Our platform gives excess food a comeback, serving meals over waste. Dine sustainably in style!',
     techStack: ['React', 'TypeScript', 'Styled-components', 'Serverless'],
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    images: [],
+    description: `Experience MealShare: where food sharing meets advanced e-commerce.
+
+    Tech: React + Redux Toolkit (Frontend) | Express + Sequelize (Backend)
+    
+    For Users:
+    
+    Explore: Find fresh, affordable food instantly.
+    Shop: Effortlessly manage your cart and orders.
+    Personalize: Update your info seamlessly.
+    Control: Monitor and modify orders in real-time.
+    Discover: Locate nearby food spots on the map.
+    For Sellers:
+    
+    Showcase: Present offerings vividly.
+    Manage: Curate and update food listings easily.
+    Join MealShare's tech-driven movement for greener, efficient food sharing.`,
+    images: [
+      'meal-time-demo.png',
+      'meal-time-demo3.png',
+      'meal-time-demo2.png',
+      'meal-time-demo1.png',
+      'meal-time-demo4.png',
+      'meal-time-demo5.png',
+      'meal-time-demo6.png',
+      'meal-time-demo7.png',
+      'meal-time-demo8.png'
+    ],
     link: 'https://example.com/project1'
   },
   {
@@ -204,21 +229,15 @@ const PortfolioSection: React.FC = () => {
                 {selectedId && (
                   <motion.div
                     layoutId={selectedId}
-                    className='overlay-container absolute inset-0 md:inset-16 flex flex-col gap-2 items-center justify-center bg-gray-50 dark:bg-gray-800  rounded-lg shadow-lg p-8 md:p-12'
+                    className=' overlay-container absolute inset-0 md:inset-16 flex flex-col gap-2 items-center justify-center bg-gray-50 dark:bg-gray-800  rounded-lg shadow-lg p-8 md:p-12'
                   >
-                    <div className='grid grid-cols-1 sm:lg:grid-cols-2 md:grid-cols-1 grid-rows-2 sm:lg:grid-rows-1 md:grid-rows-2  gap-4 lg:gap-16 justify-between h-full w-full'>
-                      <div className='relative overflow-hidden rounded-lg'>
-                        <Carousel images={images} />
-                      </div>
-                      <div>
-                        <h3 className='text-lg font-semibold'>
-                          {selectedProject().title}
-                        </h3>
-                        <p className='text-gray-700 dark:text-bunker-200  text-sm'>
-                          {selectedProject().description}
-                        </p>
-                      </div>
-                    </div>
+                    <PortfolioCardExpand
+                      title={selectedProject().title}
+                      description={selectedProject().description}
+                      images={selectedProject().images}
+                      link={selectedProject()?.link}
+                      techStack={selectedProject().techStack}
+                    />
                     <motion.button
                       onClick={() => setSelectedId(null)}
                       className='absolute right-4 top-4 text-xl text-gray-700 dark:text-bunker-200 hover:text-gray-900 dark:hover:text-bunker-50 transition-colors duration-500'

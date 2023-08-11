@@ -46,7 +46,7 @@ const Carousel: React.FC<CarouselProps> = ({ images }) => {
       <AnimatePresence initial={false} custom={direction} >
         <motion.img
           key={page}
-          className='absolute h-full object-contain'
+          className='absolute h-full w-full object-contain object-center'
           src={images[imageIndex]}
           custom={direction}
           variants={variants}

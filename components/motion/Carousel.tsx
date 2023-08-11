@@ -71,10 +71,10 @@ const Carousel: React.FC<CarouselProps> = ({ images }) => {
           }}
         />
       </AnimatePresence>
-      <div className='dark:bg-bunker-800 rounded-full  top-[calc(50%_-_20px)] absolute w-10 h-10 flex justify-center items-center select-none cursor-pointer font-[bold] text-lg z-[2]  right-2.5' onClick={() => paginate(1)}>
+      <div className='dark:bg-bunker-800 dark:bg-opacity-25 dark:backdropbackdrop-blur rounded-full  top-[calc(50%_-_20px)] absolute w-10 h-10 flex justify-center items-center select-none cursor-pointer font-[bold] text-lg z-[2]  right-2.5' onClick={() => paginate(1)}>
         {'‣'}
       </div>
-      <div className='dark:bg-bunker-800 rounded-full  top-[calc(50%_-_20px)] absolute w-10 h-10 flex justify-center items-center select-none cursor-pointer font-[bold] text-lg z-[2]   -scale-100 left-2.5' onClick={() => paginate(-1)}>
+      <div className='dark:bg-bunker-800 dark:bg-opacity-25 dark:backdropbackdrop-blur rounded-full  top-[calc(50%_-_20px)] absolute w-10 h-10 flex justify-center items-center select-none cursor-pointer font-[bold] text-lg z-[2]   -scale-100 left-2.5' onClick={() => paginate(-1)}>
         {'‣'}
       </div>
     </>

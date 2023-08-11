@@ -83,7 +83,7 @@ const SkillSection: React.FC = () => {
 
   return (
     <div className='container mx-auto py-20 '>
-      <h1 className='text-4xl font-bold mb-8'>Skills</h1>
+      <h1 className='text-4xl font-bold mb-8 text-bunker-600 dark:text-bunker-300'>Skills</h1>
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-md p-8'>
         <SkillList title='Front-end Development' skills={frontEndSkills} />
         <SkillList title='Back-end Development' skills={backEndSkills} />

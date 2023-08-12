@@ -1,85 +1,9 @@
 import React from 'react'
 import { IconType } from 'react-icons'
-import { AiOutlineCloudServer } from 'react-icons/ai'
-import { FaHome, FaUbuntu } from 'react-icons/fa'
-import { LiaInfinitySolid } from 'react-icons/lia'
-import { MdWeb } from 'react-icons/md'
-import {
-  SiAmazonaws,
-  SiCss3,
-  SiDart,
-  SiDocker,
-  SiExpress,
-  SiFlutter,
-  SiGit,
-  SiGooglecloud,
-  SiGooglehome,
-  SiHtml5,
-  SiI18Next,
-  SiJavascript,
-  SiJest,
-  SiMongodb,
-  SiMui,
-  SiNextdotjs,
-  SiNginx,
-  SiNodedotjs,
-  SiPostgresql,
-  SiReact,
-  SiRedux,
-  SiServerless,
-  SiStyledcomponents,
-  SiTailwindcss,
-  SiTypescript,
-  SiWebpack
-} from 'react-icons/si'
-import { TbApi } from 'react-icons/tb'
+import { backEndSkills, cloudSkills, frontEndSkills, smartHomeSkills } from './data'
+
 const SkillSection: React.FC = () => {
-  const frontEndSkills = [
-    { name: 'JavaScript', icon: SiJavascript },
-    { name: 'TypeScript', icon: SiTypescript },
-    { name: 'React', icon: SiReact },
-    { name: 'Redux', icon: SiRedux },
-    { name: 'Next.js', icon: SiNextdotjs },
-    { name: 'Jest', icon: SiJest },
-    { name: 'i18next', icon: SiI18Next },
-    { name: 'CSS', icon: SiCss3 },
-    { name: 'HTML', icon: SiHtml5 },
-    { name: 'Styled-components', icon: SiStyledcomponents },
-    { name: 'Tailwind CSS', icon: SiTailwindcss },
-    { name: 'MUI (Material-UI)', icon: SiMui },
-    { name: 'RWD (Responsive Web Design)', icon: MdWeb },
-    { name: 'Webpack', icon: SiWebpack },
-    { name: 'Flutter', icon: SiFlutter },
-    { name: 'Dart', icon: SiDart }
-  ]
 
-  const backEndSkills = [
-    { name: 'Node.js', icon: SiNodedotjs },
-    { name: 'Express', icon: SiExpress },
-    { name: 'Restful API', icon: TbApi },
-    { name: 'PostgreSQL', icon: SiPostgresql },
-    { name: 'NoSQL', icon: SiMongodb },
-    { name: 'Microservices', icon: AiOutlineCloudServer },
-    { name: 'Serverless', icon: SiServerless },
-    { name: 'Nginx', icon: SiNginx }
-  ]
-
-  const cloudSkills = [
-    { name: 'GCP (Google Cloud Platform)', icon: SiGooglecloud },
-    { name: 'AWS (Amazon Web Services)', icon: SiAmazonaws },
-    { name: 'Linux', icon: FaUbuntu },
-    { name: 'Docker', icon: SiDocker },
-    {
-      name: 'CI/CD',
-      icon: LiaInfinitySolid
-    },
-    { name: 'Git', icon: SiGit }
-  ]
-
-  const smartHomeSkills = [
-    { name: 'Google Smart Home', icon: SiGooglehome },
-    { name: 'Matter', icon: FaHome }
-  ]
 
   return (
     <div className='container mx-auto py-20 '>

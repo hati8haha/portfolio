@@ -68,8 +68,7 @@ const PortfolioCardExpand = ({
   title,
   description,
   images,
-  link,
-  techStack
+  link
 }: PortfolioCardExpandProps) => {
   return (
     <div className='grid grid-cols-1 sm:lg:grid-cols-2 md:grid-cols-1 grid-rows-2 sm:lg:grid-rows-1 md:grid-rows-2  gap-4 lg:gap-16 justify-between h-full w-full'>

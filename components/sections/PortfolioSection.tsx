@@ -7,7 +7,7 @@ import Image from 'next/image'
 import { LinkButton, TechStackType, allSKills, projects } from './data'
 import { IconType } from 'react-icons'
 import Tooltip from '../ui/Tooltip'
-import Link from 'next/link'
+import OnScrollInViewAnimation from '../motion/OnScrollInViewAnimation'
 
 interface PortfolioCardProps {
   title: string
@@ -73,7 +73,7 @@ const PortfolioCardExpand = ({
   return (
     <div className='grid grid-cols-1 sm:lg:grid-cols-2 md:grid-cols-1 grid-rows-2 sm:lg:grid-rows-1 md:grid-rows-2  gap-4 lg:gap-16 justify-between h-full w-full'>
       <div className='relative overflow-hidden rounded-lg'>
-        <Carousel images={images} />
+        <Carousel images={images} imgClassName=' object-cover object-center' />
       </div>
       <div className='flex flex-col gap-4'>
         <h3 className='text-lg font-semibold'>{title}</h3>
@@ -89,7 +89,7 @@ const PortfolioCardExpand = ({
               target='_blank'
               href={item.link}
               className='bg-bunker-600 text-white px-4 py-2 rounded hover:bg-bunker-700 transition-colors'
-              >
+            >
               {item.name}
             </a>
           ))}
@@ -112,18 +112,20 @@ const PortfolioSection = () => {
         {projects.map((project, index) => {
           return (
             <div key={index}>
-              <motion.div
-                layoutId={index.toString()}
-                onClick={() => !selectedId && setSelectedId(index.toString())}
-                className='h-full cursor-pointer'
-              >
-                <PortfolioCard
-                  title={project.title}
-                  description={project.shortDescription}
-                  image={project.coverImage}
-                  techStack={project.techStack}
-                />
-              </motion.div>
+              <OnScrollInViewAnimation>
+                <motion.div
+                  layoutId={index.toString()}
+                  onClick={() => !selectedId && setSelectedId(index.toString())}
+                  className='h-full cursor-pointer'
+                >
+                  <PortfolioCard
+                    title={project.title}
+                    description={project.shortDescription}
+                    image={project.coverImage}
+                    techStack={project.techStack}
+                  />
+                </motion.div>
+              </OnScrollInViewAnimation>
             </div>
           )
         })}

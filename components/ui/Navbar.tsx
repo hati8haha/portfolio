@@ -1,9 +1,8 @@
 'use client'
 import Link from 'next/link'
-import { useState } from 'react'
-import { ThemeSwitcher } from './ThemeSwitcher'
+import { PropsWithChildren, useState } from 'react'
 
-const Navbar = () => {
+const Navbar = ({children}: PropsWithChildren) => {
   const [navbar, setNavbar] = useState(false)
 
   return (
@@ -12,7 +11,9 @@ const Navbar = () => {
         <div>
           <div className='flex items-center justify-between py-3 md:py-5 md:block'>
             <Link href='/'>
-              <h2 className='text-2xl text-bunker-900 dark:text-bunker-50 font-bold font-mono'>Haoting Cheng</h2>
+              <h2 className='text-2xl text-bunker-900 dark:text-bunker-50 font-bold font-mono'>
+                Haoting Cheng
+              </h2>
             </Link>
             <div className='md:hidden'>
               <button
@@ -58,22 +59,7 @@ const Navbar = () => {
               navbar ? 'block' : 'hidden'
             }`}
           >
-            <ul className='items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0'>
-              <li className='text-bunker-900 dark:text-white font-mono'>
-                <Link href='/'>Home</Link>
-              </li>
-              <li className='text-bunker-900 dark:text-white font-mono'>
-                <Link href='/posts'>Blog</Link>
-              </li>
-              <li className='text-bunker-900 dark:text-white font-mono'>
-                <Link href='/posts'>Portfolio</Link>
-              </li>
-              <li className='text-bunker-900 dark:text-white font-mono'>
-                <Link href='/about'>About</Link>
-              </li>
-              <li className='text-bunker-900 dark:text-white font-mono'>
-<ThemeSwitcher />              </li>
-            </ul>
+           {children}
           </div>
         </div>
       </div>

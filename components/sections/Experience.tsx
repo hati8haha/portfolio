@@ -1,31 +1,13 @@
-'use client'
-import OnScrollFadeIn from '@/components/motion/OnScrollInViewAnimation'
-import Image from 'next/image'
 import { PropsWithChildren } from 'react'
 
 const Experience = ({ children }: PropsWithChildren) => {
   return (
-    <section className='max-w-xl my-16 flex-col flex gap-16	'>
-      <h2 className='text-4xl font-bold text-bunker-600 dark:text-bunker-300'>Experience</h2>
-      <OnScrollFadeIn>
+    <section className='container mx-auto py-20 flex-col flex gap-16 items-center'>
+      <h2 className='text-4xl font-bold  text-bunker-600 dark:text-bunker-300 self-start'>
+        Experience
+      </h2>
 
-      <p className='text-xl leading-8 text-bunker-600 dark:text-bunker-300'>
-        <span className=''>In my career, I've been lucky to work at </span>
-        <Image
-          src={'/google-logo.svg'}
-          width={200}
-          height={40}
-          alt='google-logo'
-          className='inline align-baseline translate-y-4'
-        />
-        <span>
-          {' '}
-          and start-ups, building creativity web apps and contributing to the
-          Google Developer community. 😄
-        </span>
-      </p>
-      </OnScrollFadeIn>
-      <div className='flex flex-col gap-8'>{children}</div>
+      <div className='flex flex-col gap-8 max-w-2xl'>{children}</div>
     </section>
   )
 }

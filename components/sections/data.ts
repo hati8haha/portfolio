@@ -216,7 +216,7 @@ export const jobsData = [
 export const projects: ProjectData[] = [
   {
     title: 'Deer Donate',
-    coverImage: '/deerdonate-notification.webp',
+    coverImage: '/deerdonate-donate.gif',
     shortDescription:
       'Leveling up livestreams! 🚀💰 Real-time donations, transactions without the headache, and gamified interactions 🎮🎁.',
     techStack: [

@@ -6,7 +6,7 @@ const Hero = () => {
     <section className='flex justify-center items-center w-full flex-col pt-32'>
       <div className='my-32'>
         <p className='text-3xl sm:text-5xl md:text-6xl  animate-fade-right animate-once animate-delay-[500ms]'>
-          Hey there! I'm <span className='font-bold'>Haoting Cheng</span>, a{' '}
+          Hi there! I'm <span className='font-bold'>Haoting Cheng</span>, a{' '}
         </p>
         <p className='text-3xl sm:text-5xl md:text-6xl animate-fade-left animate-once animate-delay-[900ms]'>
           <span className='font-extrabold	text-6xl lg:text-7xl  bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% bg-clip-text text-transparent'>
@@ -27,7 +27,7 @@ const Hero = () => {
           </span>
           <Image
             src={'/google-logo.svg'}
-            width={200}
+            width={160}
             height={40}
             alt='google-logo'
             className='inline-flex align-baseline translate-y-4 animate-jump-in animate-once animate-delay-[2000ms]'
@@ -35,7 +35,7 @@ const Hero = () => {
           <span className='animate-fade  animate-once animate-duration-[800ms]  animate-delay-[1500ms]'>
             {' '}
             and start-ups, building creativity web apps and contributing to the
-            Google Developer community. 😄
+            Google Developer community.✨
           </span>
         </p>
 

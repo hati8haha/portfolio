@@ -1,51 +1,49 @@
 'use client'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import Carousel from '../motion/Carousel'
-interface FloatingImagesProps {
-  images: string[]
+import { useEffect, useState } from 'react'
+
+interface ImageComponentProps {
+  images: string[];
+  interval: number;
 }
 
-const FloatingImages = ({ images }: FloatingImagesProps) => {
+const ImageComponent: React.FC<ImageComponentProps> = ({ images, interval }) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, interval);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [images, interval]);
+
   return (
-    <div className='h-full w-full relative flex flex-col gap-2'>
-      <Carousel images={images} autoPlay={true} draggable={true} autoPlayInterval={1000} imgClassName=' object-contain object-center' />
-      {/* {images.map((image, index) => (
-        <motion.div
+    <div className="h-full w-full relative">
+      {images.map((imageUrl, index) => (
+        <motion.img
           key={index}
-          initial={{ y: index * 30, zIndex: index, opacity: 0 }}
-          animate={{
-            y: index * 30 + 220,
-            zIndex: images.length - index,
-            opacity: 1
+          src={imageUrl}
+          alt={`Image ${index}`}
+          style={{
+            opacity: index === currentImageIndex ? 1 : 0,
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "contain",
           }}
-          exit={{
-            y: index * 30 + 220,
-            zIndex: images.length - index,
-            opacity: 1
-          }}
-          
-          transition={{
-            repeat: Infinity,
-            repeatType: 'loop',
-            duration: 3,
-            delay: index,
-            // type: 'just',
-            // ease: 'easeInOut'
-          }}
-          className='absolute'
-        >
-          <Image
-            src={image}
-            alt={image}
-            width={500}
-            height={500}
-            className={`transition-all rounded-lg shadow hover:shadow-lg  object-contain`}
-          />
-        </motion.div>
-      ))} */}
+          animate={{ opacity: index === currentImageIndex ? 1 : 0 }}
+          transition={{ duration: 0.5 }}
+        />
+      ))}
     </div>
-  )
-}
+  );
+};
 
-export default FloatingImages
+export default ImageComponent;

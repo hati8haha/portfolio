@@ -1,3 +1,5 @@
+import Counter from "../motion/Counter"
+import OnScrollInViewAnimation from "../motion/OnScrollInViewAnimation"
 import FloatingImages from "./FloatingImages"
 
 const ComunitySection = () => {
@@ -10,14 +12,16 @@ const ComunitySection = () => {
     Google Dev Community Work
   </h2>
   <div className='flex flex-col gap-8'>
-    <div className="flex justify-between">
+    <Counter from={0} to={400} duration={2} className="text-3xl" inViewShow={true} />
+
+    <div className="flex flex-col md:flex-row gap-3 justify-between">
       <div className="flex-grow px-6">
-      <FloatingImages images={ansImages} />
+      <FloatingImages images={ansImages} interval={2000} />
       </div>
       <div className="border border-bunker-600 dark:border-bunker-300 h-[40rem]"></div>
       <div className="flex-grow px-6">
 
-      <FloatingImages images={thxImages} />
+      <FloatingImages images={thxImages} interval={2000} />
       </div>
 
     </div>

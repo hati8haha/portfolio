@@ -51,7 +51,7 @@ const PortfolioCard = ({
           const SkillIcon: IconType = skill.icon
           const logoColor = skill.color
           return (
-            <Tooltip text={skill.name}>
+            <Tooltip text={skill.name} key={skill.name}>
               <SkillIcon color={logoColor} />
             </Tooltip>
           )

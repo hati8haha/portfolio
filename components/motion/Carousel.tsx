@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence, PanInfo } from 'framer-motion'
 import { wrap } from '@motionone/utils'
-
+import {ImArrowRight2, ImArrowLeft2} from 'react-icons/im'
 interface CarouselProps {
   images: string[]
   draggable?: boolean
@@ -97,16 +97,16 @@ const Carousel: React.FC<CarouselProps> = ({
         />
       </AnimatePresence>
       {draggable &&     (<> <div
-        className='dark:bg-bunker-800 dark:bg-opacity-25 dark:backdropbackdrop-blur rounded-full  top-[calc(50%_-_20px)] absolute w-10 h-10 flex justify-center items-center select-none cursor-pointer font-[bold] text-lg z-[2]  right-2.5'
+        className='bg-gray-200 dark:bg-gray-800 hover:bg-gray-50 bg-opacity-40 dark:bg-opacity-40 hover:bg-opacity-70 dark:hover:bg-opacity-70 dark:hover:bg-gray-600 transition-all rounded-full top-[calc(50%_-_20px)] absolute w-10 h-10 flex justify-center items-center select-none cursor-pointer font-[bold] text-lg z-[2]  right-2.5'
         onClick={() => paginate(1)}
       >
-        {'‣'}
+        <ImArrowRight2  onClick={() => paginate(1)}/>
       </div>
       <div
-        className='dark:bg-bunker-800 dark:bg-opacity-25 dark:backdropbackdrop-blur rounded-full  top-[calc(50%_-_20px)] absolute w-10 h-10 flex justify-center items-center select-none cursor-pointer font-[bold] text-lg z-[2]   -scale-100 left-2.5'
+        className='bg-gray-200 dark:bg-gray-800 hover:bg-gray-50 bg-opacity-40 dark:bg-opacity-40 hover:bg-opacity-70 dark:hover:bg-opacity-70 dark:hover:bg-gray-600 transition-all rounded-full top-[calc(50%_-_20px)] absolute w-10 h-10 flex justify-center items-center select-none cursor-pointer font-[bold] text-lg z-[2]   left-2.5'
         onClick={() => paginate(-1)}
       >
-        {'‣'}
+        <ImArrowLeft2  onClick={() => paginate(-1)}/>
       </div></>)}
  
     </>

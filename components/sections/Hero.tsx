@@ -23,7 +23,7 @@ const Hero = () => {
         </p>
         <p className=' '>
           <span className='animate-fade animate-once animate-duration-[800ms]  animate-delay-[1500ms]'>
-            In my career, I've been lucky to work at{' '}
+            In my career, I&apos;ve been lucky to work at{' '}
           </span>
           <Image
             src={'/google-logo.svg'}

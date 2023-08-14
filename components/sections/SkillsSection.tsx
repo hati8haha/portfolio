@@ -1,6 +1,7 @@
 import React from 'react'
 import { IconType } from 'react-icons'
 import { backEndSkills, cloudSkills, frontEndSkills, smartHomeSkills } from './data'
+import OnScrollInViewAnimation from '../motion/OnScrollInViewAnimation'
 
 const SkillSection: React.FC = () => {
 
@@ -43,7 +44,10 @@ const SkillList: React.FC<SkillListProps> = ({ title, skills }) => {
     <div className='sm:justify-self-center'>
       <h2 className='text-lg font-semibold mb-4'>{title}</h2>
       {skills.map((skill, index) => (
-        <Skill key={index} name={skill.name} icon={skill.icon} />
+        <OnScrollInViewAnimation key={index}             initial={{ opacity: 0, x: -30 }}
+        animate={{ opacity: 1, x: 0 }}>
+        <Skill name={skill.name} icon={skill.icon} />
+        </OnScrollInViewAnimation>
       ))}
     </div>
   )

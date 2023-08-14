@@ -2,13 +2,13 @@
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 
-interface ImageComponentProps {
+interface SlideshowProps {
   images: string[]
   interval: number
   initialX?: number
 }
 
-const ImageComponent: React.FC<ImageComponentProps> = ({
+const Slideshow: React.FC<SlideshowProps> = ({
   images,
   interval,
   initialX = 0
@@ -50,4 +50,4 @@ const ImageComponent: React.FC<ImageComponentProps> = ({
   )
 }
 
-export default ImageComponent
+export default Slideshow

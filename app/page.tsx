@@ -16,6 +16,7 @@ export default function Home() {
       <Experience>
         {jobsData.map((job, i) => (
           <OnScrollInViewAnimation
+            key={i}
             initial={{ opacity: 0, x: -60 }}
             animate={{ opacity: 1, x: 0 }}
           >

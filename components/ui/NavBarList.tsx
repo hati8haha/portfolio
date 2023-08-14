@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { ThemeSwitcher } from './ThemeSwitcher'
+import { SiGithub, SiLinkedin } from 'react-icons/si'
 
 const NavBarList = () => {
   return (
@@ -10,6 +11,16 @@ const NavBarList = () => {
       <li className='text-bunker-900 dark:text-white font-mono'>
         <Link href='/posts'>Blog</Link>
       </li>
+      <a href='https://linkedin.com/in/haoting-cheng'>
+        <li className='text-bunker-900 dark:text-white font-mono'>
+          <SiLinkedin />
+        </li>
+      </a>
+      <a href='https://github.com/hati8haha'>
+        <li className='text-bunker-900 dark:text-white font-mono'>
+          <SiGithub />
+        </li>
+      </a>
       <li className='text-bunker-900 dark:text-white font-mono'>
         <ThemeSwitcher />
       </li>

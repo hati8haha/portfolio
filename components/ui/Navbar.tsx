@@ -1,67 +1,12 @@
 'use client'
-import Link from 'next/link'
-import { PropsWithChildren, useState } from 'react'
+import { PropsWithChildren } from 'react'
 
-const Navbar = ({children}: PropsWithChildren) => {
-  const [navbar, setNavbar] = useState(false)
-
+const Navbar = ({ children }: PropsWithChildren) => {
   return (
-    <nav className='w-full drop-shadow-md shadow-bunker-100  bg-bunker-200 dark:bg-bunker-900'>
-      <div className='justify-between px-4 mx-auto lg:max-w-7xl md:items-center md:flex md:px-8'>
-        <div>
-          <div className='flex items-center justify-between py-3 md:py-5 md:block'>
-            <Link href='/'>
-              <h2 className='text-2xl text-bunker-900 dark:text-bunker-50 font-bold font-mono'>
-                Haoting Cheng
-              </h2>
-            </Link>
-            <div className='md:hidden'>
-              <button
-                className='p-2 text-gray-700 rounded-md outline-none focus:border-gray-400 focus:border'
-                onClick={() => setNavbar(!navbar)}
-              >
-                {navbar ? (
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    className='w-6 h-6  text-bunker-900 dark:text-white'
-                    viewBox='0 0 20 20'
-                    fill='currentColor'
-                  >
-                    <path
-                      fillRule='evenodd'
-                      d='M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z'
-                      clipRule='evenodd'
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    className='w-6 h-6 text-bunker-900 dark:text-white'
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    stroke='currentColor'
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      d='M4 6h16M4 12h16M4 18h16'
-                    />
-                  </svg>
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div
-            className={`flex-1 justify-self-center pb-3 mt-8 md:block md:pb-0 md:mt-0 ${
-              navbar ? 'block' : 'hidden'
-            }`}
-          >
-           {children}
-          </div>
-        </div>
+    <nav className='w-full flex justify-between'>
+      <div></div>
+      <div className=' px-4 drop-shadow-md shadow-bunker-100  bg-bunker-200 dark:bg-bunker-900 bg-opacity-60 dark:bg-opacity-60 rounded-full m-4'>
+        {children}
       </div>
     </nav>
   )

@@ -4,13 +4,13 @@ import { SiGithub, SiLinkedin } from 'react-icons/si'
 
 const NavBarList = () => {
   return (
-    <ul className='items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0'>
+    <ul className='items-center justify-center space-y-8 flex flex-col md:flex-row md:space-x-6 md:space-y-0'>
       <li className='text-bunker-900 dark:text-white font-mono'>
         <Link href='/'>About</Link>
       </li>
-      <li className='text-bunker-900 dark:text-white font-mono'>
+      {/* <li className='text-bunker-900 dark:text-white font-mono'>
         <Link href='/posts'>Blog</Link>
-      </li>
+      </li> */}
       <a href='https://linkedin.com/in/haoting-cheng'>
         <li className='text-bunker-900 dark:text-white font-mono'>
           <SiLinkedin />

@@ -31,7 +31,7 @@ const PortfolioCard = ({
   techStack
 }: PortfolioCardProps) => {
   return (
-    <div className='flex justify-between sm:justify-start sm:flex-col gap-0 sm:gap-2 h-full bg-gray-50 dark:bg-gray-800 shadow-md rounded-lg p-4 transition-all hover:shadow-lg'>
+    <div className='flex justify-between sm:justify-start sm:flex-col gap-0 sm:gap-2 h-full bg-gray-50 dark:bg-gray-800 shadow-md rounded-lg p-4 transition-all hover:shadow-lg '>
       <div className='w-full hidden md:block h-48 object-cover relative rounded-lg overflow-hidden '>
         <Image
           src={image}

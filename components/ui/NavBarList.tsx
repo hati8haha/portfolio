@@ -8,9 +8,9 @@ const NavBarList = () => {
       <li className='text-bunker-900 dark:text-white font-mono'>
         <Link href='/'>About</Link>
       </li>
-      <li className='text-bunker-900 dark:text-white font-mono'>
+      {/* <li className='text-bunker-900 dark:text-white font-mono'>
         <Link href='/posts'>Blog</Link>
-      </li>
+      </li> */}
       <a href='https://linkedin.com/in/haoting-cheng'>
         <li className='text-bunker-900 dark:text-white font-mono'>
           <SiLinkedin />

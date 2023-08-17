@@ -16,7 +16,7 @@ export const ThemeSwitcher = () => {
   }
   return (
     <button
-      className={`w-fit p-2`}
+      className={`w-fit py-2`}
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
     >
       {theme === "light" ? <DarkIcon fill="#0b0f14" /> : <LightIcon  fill="#f5f7fa" />}

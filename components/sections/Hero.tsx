@@ -23,14 +23,15 @@ const Hero = () => {
         </p>
         <p className=' '>
           <span className='animate-fade animate-once animate-duration-[800ms]  animate-delay-[1500ms]'>
-            In my career, I&apos;ve been lucky to work at{' '}
+            Throughout my professional journey, I&apos;ve had the privilege of
+            collaborating with teams at{' '}
           </span>
           <Image
             src={'/google-logo.svg'}
-            width={160}
+            width={120}
             height={40}
             alt='google-logo'
-            className='inline-flex align-baseline translate-y-4 animate-jump-in animate-once animate-delay-[2000ms]'
+            className='inline-flex   animate-jump-in animate-once animate-delay-[2000ms]'
           />
           <span className='animate-fade  animate-once animate-duration-[800ms]  animate-delay-[1500ms]'>
             {' '}
@@ -40,11 +41,11 @@ const Hero = () => {
         </p>
 
         <p className=' animate-fade  animate-once animate-duration-[800ms]  animate-delay-[1500ms]'>
-          Currently in Taiwan, I&apos;m keen on exploring opportunities in the UK.
-          Let&apos;s connect on{' '}
+          Currently based in Taiwan, I&apos;m excited about seeking
+          opportunities in the UK. Let&apos;s link up on{' '}
           <a
             href='https://www.linkedin.com/in/haoting-cheng'
-            className='text-sky-500'
+            className='text-sky-600 dark:text-sky-400'
           >
             LinkedIn
           </a>

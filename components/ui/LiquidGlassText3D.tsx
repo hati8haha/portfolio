@@ -60,7 +60,7 @@ const getResponsiveConfig = () => {
 			textSize: { line1: 2.0, line2: 1.6 },
 			scale: 0.7,
 			containerHeight: "16rem",
-			cameraDistance: 18,
+			cameraDistance: 14,
 			fallbackFontSize: 64,
 		};
 	} else if (width < 768) {

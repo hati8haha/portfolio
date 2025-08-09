@@ -26,16 +26,14 @@ const config: Config = {
           '800': '#2f465d',
           '900': '#2b3c4f',
           '950': '#0b0f14',
-      },
-      
-           
+        },
       }
     },
   },
   plugins: [
-    require('tailwindcss-animated')
+    require('tailwindcss-animated'),
+    require('@tailwindcss/typography')
   ],
   darkMode: 'class',
-
 }
 export default config

@@ -1,122 +1,222 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState, useCallback } from 'react';
-import * as THREE from 'three';
-import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
-import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
+import { useCallback, useEffect, useRef, useState } from "react";
+import * as THREE from "three";
+import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry.js";
+import { FontLoader } from "three/examples/jsm/loaders/FontLoader.js";
+
+// Extend Navigator interface to include deviceMemory
+interface ExtendedNavigator extends Navigator {
+	deviceMemory?: number;
+}
 
 // Performance configuration based on device capabilities
 const getPerformanceConfig = () => {
-  if (typeof window === 'undefined') return { quality: 'medium', pixelRatio: 1 };
-  
-  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-  const isLowEnd = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
-  const hasLowMemory = (navigator as any).deviceMemory && (navigator as any).deviceMemory <= 4;
-  
-  if (isMobile || isLowEnd || hasLowMemory) {
-    return { quality: 'low', pixelRatio: 1 };
-  } else if (window.devicePixelRatio > 2) {
-    return { quality: 'high', pixelRatio: Math.min(window.devicePixelRatio, 2) };
-  }
-  
-  return { quality: 'medium', pixelRatio: Math.min(window.devicePixelRatio, 2) };
+	if (typeof window === "undefined")
+		return { quality: "medium", pixelRatio: 1 };
+
+	const isMobile =
+		/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+			navigator.userAgent,
+		);
+	const isLowEnd =
+		navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
+	const extNavigator = navigator as ExtendedNavigator;
+	const hasLowMemory = extNavigator.deviceMemory
+		? extNavigator.deviceMemory <= 4
+		: false;
+
+	if (isMobile || isLowEnd || hasLowMemory) {
+		return { quality: "low", pixelRatio: 1 };
+	} else if (window.devicePixelRatio > 2) {
+		return {
+			quality: "high",
+			pixelRatio: Math.min(window.devicePixelRatio, 2),
+		};
+	}
+
+	return {
+		quality: "medium",
+		pixelRatio: Math.min(window.devicePixelRatio, 2),
+	};
+};
+
+// Responsive configuration based on screen size
+const getResponsiveConfig = () => {
+	if (typeof window === "undefined")
+		return {
+			textSize: { line1: 3.6, line2: 3.0 },
+			scale: 1.2,
+			containerHeight: "24rem",
+			cameraDistance: 15,
+			fallbackFontSize: 128,
+		};
+
+	const width = window.innerWidth;
+
+	if (width < 640) {
+		// Mobile
+		return {
+			textSize: { line1: 2.0, line2: 1.6 },
+			scale: 0.7,
+			containerHeight: "16rem",
+			cameraDistance: 18,
+			fallbackFontSize: 64,
+		};
+	} else if (width < 768) {
+		// Small tablet
+		return {
+			textSize: { line1: 2.8, line2: 2.2 },
+			scale: 0.9,
+			containerHeight: "20rem",
+			cameraDistance: 16,
+			fallbackFontSize: 96,
+		};
+	} else if (width < 1024) {
+		// Tablet
+		return {
+			textSize: { line1: 3.2, line2: 2.6 },
+			scale: 1.0,
+			containerHeight: "22rem",
+			cameraDistance: 15,
+			fallbackFontSize: 112,
+		};
+	} else if (width < 1280) {
+		// Desktop
+		return {
+			textSize: { line1: 3.6, line2: 3.0 },
+			scale: 1.2,
+			containerHeight: "24rem",
+			cameraDistance: 15,
+			fallbackFontSize: 128,
+		};
+	} else if (width < 1600) {
+		// Large desktop - moderate scaling
+		return {
+			textSize: { line1: 3.8, line2: 3.2 },
+			scale: 1.1,
+			containerHeight: "28rem",
+			cameraDistance: 14,
+			fallbackFontSize: 128,
+		};
+	} else {
+		// Extra large desktop - conservative scaling to prevent overflow
+		return {
+			textSize: { line1: 4.0, line2: 3.4 },
+			scale: 1.0,
+			containerHeight: "30rem",
+			cameraDistance: 13,
+			fallbackFontSize: 132,
+		};
+	}
 };
 
 // Intersection Observer hook for viewport detection
-const useIntersectionObserver = (elementRef: React.RefObject<HTMLElement>, threshold = 0.1) => {
-  const [isIntersecting, setIsIntersecting] = useState(false);
-  const [hasIntersected, setHasIntersected] = useState(false);
+const useIntersectionObserver = (
+	elementRef: React.RefObject<HTMLElement>,
+	threshold = 0.1,
+) => {
+	const [isIntersecting, setIsIntersecting] = useState(false);
+	const [hasIntersected, setHasIntersected] = useState(false);
 
-  useEffect(() => {
-    const element = elementRef.current;
-    if (!element) return;
+	useEffect(() => {
+		const element = elementRef.current;
+		if (!element) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsIntersecting(entry.isIntersecting);
-        if (entry.isIntersecting && !hasIntersected) {
-          setHasIntersected(true);
-        }
-      },
-      { threshold }
-    );
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				setIsIntersecting(entry.isIntersecting);
+				if (entry.isIntersecting && !hasIntersected) {
+					setHasIntersected(true);
+				}
+			},
+			{ threshold },
+		);
 
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, [elementRef, hasIntersected, threshold]);
+		observer.observe(element);
+		return () => observer.disconnect();
+	}, [elementRef, hasIntersected, threshold]);
 
-  return { isIntersecting, hasIntersected };
+	return { isIntersecting, hasIntersected };
 };
 
 interface LiquidGlassText3DProps {
-  text?: string;
-  className?: string;
+	text?: string;
+	className?: string;
 }
 
-export default function LiquidGlassText3D({ 
-  text = "Frontend Developer & UI Engineer",
-  className = "" 
-}: LiquidGlassText3DProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { isIntersecting, hasIntersected } = useIntersectionObserver(containerRef, 0.1);
-  const performanceConfig = useRef(getPerformanceConfig());
-  
-  const sceneRef = useRef<{
-    scene?: THREE.Scene;
-    camera?: THREE.PerspectiveCamera;
-    renderer?: THREE.WebGLRenderer;
-    textMesh?: THREE.Group;
-    clock?: THREE.Clock;
-    animationId?: number;
-    lightPosition?: THREE.Vector2;
-    interactiveLight?: THREE.PointLight;
-    isAnimating?: boolean;
-    lastFrameTime?: number;
-  }>({});
+export default function LiquidGlassText3D({
+	className = "",
+}: Omit<LiquidGlassText3DProps, "text">) {
+	const containerRef = useRef<HTMLDivElement>(null);
+	const { isIntersecting, hasIntersected } = useIntersectionObserver(
+		containerRef,
+		0.1,
+	);
+	const performanceConfig = useRef(getPerformanceConfig());
+	const [responsiveConfig, setResponsiveConfig] = useState(
+		getResponsiveConfig(),
+	);
 
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [loadingError, setLoadingError] = useState(false);
-  const fadeProgressRef = useRef(0);
+	const sceneRef = useRef<{
+		scene?: THREE.Scene;
+		camera?: THREE.PerspectiveCamera;
+		renderer?: THREE.WebGLRenderer;
+		textMesh?: THREE.Group;
+		clock?: THREE.Clock;
+		animationId?: number;
+		lightPosition?: THREE.Vector2;
+		targetLightPosition?: THREE.Vector2;
+		interactiveLight?: THREE.PointLight;
+		isAnimating?: boolean;
+		lastFrameTime?: number;
+		isMouseInside?: boolean;
+	}>({});
 
-  // Throttle animation based on performance and visibility
-  const shouldAnimate = useCallback(() => {
-    if (!isIntersecting) return false;
-    
-    const now = performance.now();
-    const lastFrame = sceneRef.current.lastFrameTime || 0;
-    const targetFPS = performanceConfig.current.quality === 'low' ? 30 : 60;
-    const frameInterval = 1000 / targetFPS;
-    
-    if (now - lastFrame >= frameInterval) {
-      sceneRef.current.lastFrameTime = now;
-      return true;
-    }
-    
-    return false;
-  }, [isIntersecting]);
+	const [isLoaded, setIsLoaded] = useState(false);
+	const [loadingError, setLoadingError] = useState(false);
+	const fadeProgressRef = useRef(0);
+	const resizeTimeoutRef = useRef<NodeJS.Timeout>();
 
-  const createLiquidGlassMaterial = useCallback((): THREE.ShaderMaterial => {
-    const quality = performanceConfig.current.quality;
-    const isLowQuality = quality === 'low';
-    
-    return new THREE.ShaderMaterial({
-      uniforms: {
-        time: { value: 0 },
-        lightPosition: { value: new THREE.Vector2(0.5, 0.5) },
-        resolution: { value: new THREE.Vector2(800, 600) },
-        opacity: { value: 0.95 },
-        fadeInProgress: { value: 0.0 },
-        gradientStart: { value: new THREE.Color(0.8, 0.4, 1.0) },
-        gradientMiddle: { value: new THREE.Color(0.4, 0.8, 1.0) },
-        gradientEnd: { value: new THREE.Color(1.0, 0.6, 0.8) },
-        holographicColor1: { value: new THREE.Color(1.0, 0.2, 0.8) },
-        holographicColor2: { value: new THREE.Color(0.2, 1.0, 0.6) },
-        holographicColor3: { value: new THREE.Color(0.6, 0.2, 1.0) },
-        rimColor: { value: new THREE.Color(0.0, 0.8, 1.0) },
-        lightIntensity: { value: isLowQuality ? 2.0 : 3.0 },
-        qualityLevel: { value: isLowQuality ? 0.0 : 1.0 }
-      },
-      vertexShader: `
+	// Throttle animation based on performance and visibility
+	const shouldAnimate = useCallback(() => {
+		if (!isIntersecting) return false;
+
+		const now = performance.now();
+		const lastFrame = sceneRef.current.lastFrameTime || 0;
+		const targetFPS = performanceConfig.current.quality === "low" ? 30 : 60;
+		const frameInterval = 1000 / targetFPS;
+
+		if (now - lastFrame >= frameInterval) {
+			sceneRef.current.lastFrameTime = now;
+			return true;
+		}
+
+		return false;
+	}, [isIntersecting]);
+
+	const createLiquidGlassMaterial = useCallback((): THREE.ShaderMaterial => {
+		const quality = performanceConfig.current.quality;
+		const isLowQuality = quality === "low";
+
+		return new THREE.ShaderMaterial({
+			uniforms: {
+				time: { value: 0 },
+				lightPosition: { value: new THREE.Vector2(0.5, 0.5) },
+				resolution: { value: new THREE.Vector2(800, 600) },
+				opacity: { value: 0.95 },
+				fadeInProgress: { value: 0.0 },
+				gradientStart: { value: new THREE.Color(0.8, 0.4, 1.0) },
+				gradientMiddle: { value: new THREE.Color(0.4, 0.8, 1.0) },
+				gradientEnd: { value: new THREE.Color(1.0, 0.6, 0.8) },
+				holographicColor1: { value: new THREE.Color(1.0, 0.2, 0.8) },
+				holographicColor2: { value: new THREE.Color(0.2, 1.0, 0.6) },
+				holographicColor3: { value: new THREE.Color(0.6, 0.2, 1.0) },
+				rimColor: { value: new THREE.Color(0.0, 0.8, 1.0) },
+				lightIntensity: { value: isLowQuality ? 2.0 : 3.0 },
+				qualityLevel: { value: isLowQuality ? 0.0 : 1.0 },
+			},
+			vertexShader: `
         varying vec3 vPosition;
         varying vec3 vNormal;
         varying vec2 vUv;
@@ -137,7 +237,7 @@ export default function LiquidGlassText3D({
           gl_Position = projectionMatrix * viewPosition;
         }
       `,
-      fragmentShader: `
+			fragmentShader: `
         uniform float time;
         uniform vec2 lightPosition;
         uniform vec2 resolution;
@@ -272,409 +372,540 @@ export default function LiquidGlassText3D({
           gl_FragColor = vec4(finalColor, iceOpacity * fadeEase);
         }
       `,
-      transparent: true,
-      blending: THREE.NormalBlending,
-      side: THREE.DoubleSide,
-      depthWrite: true
-    });
-  }, []);
+			transparent: true,
+			blending: THREE.NormalBlending,
+			side: THREE.DoubleSide,
+			depthWrite: true,
+		});
+	}, []);
 
-  const setupLighting = useCallback((scene: THREE.Scene) => {
-    const quality = performanceConfig.current.quality;
-    const lightCount = quality === 'low' ? 2 : 4; // Reduce lights for low-end devices
-    
-    // Ambient light
-    const ambientLight = new THREE.AmbientLight(0x2a4a6b, 0.3);
-    scene.add(ambientLight);
+	const setupLighting = useCallback((scene: THREE.Scene) => {
+		const quality = performanceConfig.current.quality;
+		const lightCount = quality === "low" ? 2 : 4; // Reduce lights for low-end devices
 
-    // Main directional light
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
-    directionalLight.position.set(3, 4, 5);
-    scene.add(directionalLight);
+		// Ambient light
+		const ambientLight = new THREE.AmbientLight(0x2a4a6b, 0.3);
+		scene.add(ambientLight);
 
-    if (lightCount > 2) {
-      // Rim light (only for medium/high quality)
-      const rimLight = new THREE.DirectionalLight(0x80c0ff, 0.6);
-      rimLight.position.set(-2, -1, -3);
-      scene.add(rimLight);
+		// Main directional light
+		const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+		directionalLight.position.set(3, 4, 5);
+		scene.add(directionalLight);
 
-      // Interactive light that follows cursor
-      const interactiveLight = new THREE.PointLight(0x40a0ff, 1.5, 10);
-      interactiveLight.position.set(0, 0, 3);
-      scene.add(interactiveLight);
-      sceneRef.current.interactiveLight = interactiveLight;
-    }
-  }, []);
+		if (lightCount > 2) {
+			// Rim light (only for medium/high quality)
+			const rimLight = new THREE.DirectionalLight(0x80c0ff, 0.6);
+			rimLight.position.set(-2, -1, -3);
+			scene.add(rimLight);
 
-  const createFallbackText = useCallback((scene: THREE.Scene) => {
-    const group = new THREE.Group();
-    const material = createLiquidGlassMaterial();
-    
-    // Create simplified geometry for low-end devices
-    const quality = performanceConfig.current.quality;
-    const canvasSize = quality === 'low' ? 1024 : 2048;
-    
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d')!;
-    canvas.width = canvasSize;
-    canvas.height = canvasSize / 2.67;
-    
-    const fontSize = quality === 'low' ? 64 : 128;
-    context.fillStyle = 'white';
-    context.font = `bold ${fontSize}px Arial, sans-serif`;
-    context.textAlign = 'center';
-    context.textBaseline = 'middle';
-    
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    context.fillText('Frontend Developer', canvas.width / 2, canvas.height * 0.3);
-    context.font = `bold ${fontSize * 0.75}px Arial, sans-serif`;
-    context.fillText('& UI Engineer', canvas.width / 2, canvas.height * 0.7);
-    
-    const texture = new THREE.CanvasTexture(canvas);
-    texture.needsUpdate = true;
-    
-    const textGeometry = new THREE.PlaneGeometry(16, 6);
-    const textMaterial = new THREE.MeshBasicMaterial({
-      map: texture,
-      transparent: true,
-      opacity: 0.9
-    });
-    
-    const textMesh = new THREE.Mesh(textGeometry, textMaterial);
-    textMesh.userData = { type: 'fallback', originalY: 0 };
-    group.add(textMesh);
-    
-    // Add glass effect only for medium/high quality
-    if (quality !== 'low') {
-      const glassGeometry = new THREE.BoxGeometry(16.4, 6.4, 0.3);
-      const glassMesh = new THREE.Mesh(glassGeometry, material);
-      glassMesh.position.z = 0.2;
-      glassMesh.userData = { type: 'glass', originalY: 0 };
-      group.add(glassMesh);
-    }
-    
-    group.scale.setScalar(1.2);
-    scene.add(group);
-    
-    return group;
-  }, [createLiquidGlassMaterial]);
+			// Interactive light that follows cursor
+			const interactiveLight = new THREE.PointLight(0x40a0ff, 1.5, 10);
+			interactiveLight.position.set(0, 0, 3);
+			scene.add(interactiveLight);
+			sceneRef.current.interactiveLight = interactiveLight;
+		}
+	}, []);
 
-  const createText3D = useCallback(async (scene: THREE.Scene) => {
-    const group = new THREE.Group();
-    const material = createLiquidGlassMaterial();
-    const quality = performanceConfig.current.quality;
-    
-    try {
-      const loader = new FontLoader();
-      const fontResponse = await fetch('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json');
-      const fontData = await fontResponse.json();
-      const font = loader.parse(fontData);
-      
-      // Adjust geometry complexity based on performance
-      const curveSegments = quality === 'low' ? 6 : 12;
-      const bevelSegments = quality === 'low' ? 3 : 5;
-      
-      const line1Geometry = new TextGeometry('Frontend Developer', {
-        font: font,
-        size: 3.6,
-        depth: 0.3,
-        curveSegments,
-        bevelEnabled: quality !== 'low',
-        bevelThickness: 0.05,
-        bevelSize: 0.03,
-        bevelOffset: 0,
-        bevelSegments
-      });
-      
-      const line2Geometry = new TextGeometry('& UI Engineer', {
-        font: font,
-        size: 3.0,
-        depth: 0.25,
-        curveSegments,
-        bevelEnabled: quality !== 'low',
-        bevelThickness: 0.04,
-        bevelSize: 0.025,
-        bevelOffset: 0,
-        bevelSegments
-      });
-      
-      // Center geometries
-      line1Geometry.computeBoundingBox();
-      const line1Box = line1Geometry.boundingBox!;
-      line1Geometry.translate(
-        -(line1Box.max.x + line1Box.min.x) / 2,
-        2.0,
-        -(line1Box.max.z + line1Box.min.z) / 2
-      );
-      
-      line2Geometry.computeBoundingBox();
-      const line2Box = line2Geometry.boundingBox!;
-      line2Geometry.translate(
-        -(line2Box.max.x + line2Box.min.x) / 2,
-        -2.0,
-        -(line2Box.max.z + line2Box.min.z) / 2
-      );
-      
-      const line1Mesh = new THREE.Mesh(line1Geometry, material.clone());
-      const line2Mesh = new THREE.Mesh(line2Geometry, material.clone());
-      
-      line1Mesh.userData = { type: 'text', line: 1 };
-      line2Mesh.userData = { type: 'text', line: 2 };
-      
-      group.add(line1Mesh);
-      group.add(line2Mesh);
-      
-    } catch (error) {
-      console.warn('Failed to load font, using fallback text shapes:', error);
-      setLoadingError(true);
-      return createFallbackText(scene);
-    }
-    
-    group.scale.setScalar(1.2);
-    scene.add(group);
-    
-    return group;
-  }, [createLiquidGlassMaterial, createFallbackText]);
+	const createFallbackText = useCallback(
+		(scene: THREE.Scene) => {
+			const group = new THREE.Group();
+			const material = createLiquidGlassMaterial();
 
-  const startRenderLoop = useCallback(() => {
-    const render = () => {
-      // Only render if component is visible
-      if (!shouldAnimate()) {
-        sceneRef.current.animationId = requestAnimationFrame(render);
-        return;
-      }
+			// Create simplified geometry for low-end devices
+			const quality = performanceConfig.current.quality;
+			const canvasSize = quality === "low" ? 1024 : 2048;
 
-      const { scene, camera, renderer, textMesh, clock, lightPosition } = sceneRef.current;
-      
-      if (!scene || !camera || !renderer || !clock) return;
+			const canvas = document.createElement("canvas");
+			const context = canvas.getContext("2d");
+			if (!context) return group;
 
-      const elapsedTime = clock.getElapsedTime();
-      
-      // Calculate cursor influence
-      const cursorX = lightPosition ? lightPosition.x : 0.5;
-      const cursorY = lightPosition ? lightPosition.y : 0.5;
-      const cursorInfluenceX = (cursorX - 0.5) * 0.1;
-      const cursorInfluenceY = (cursorY - 0.5) * 0.05;
-      
-      // Animate text meshes
-      if (textMesh && textMesh.children) {
-        textMesh.children.forEach((child: any) => {
-          if (child.material && child.material.uniforms) {
-            child.material.uniforms.time.value = elapsedTime;
-            child.material.uniforms.lightPosition.value = lightPosition;
-            child.material.uniforms.fadeInProgress.value = fadeProgressRef.current;
-          }
-          
-          if (child.userData.type === 'text') {
-            const lineOffset = child.userData.line === 2 ? Math.PI * 0.5 : 0;
-            child.position.y = (child.userData.originalY || 0) + 
-              Math.sin(elapsedTime * 0.8 + lineOffset) * 0.03;
-            child.rotation.y = Math.sin(elapsedTime * 0.4) * 0.01 + cursorInfluenceX;
-            child.rotation.x = cursorInfluenceY * 0.5;
-          } else if (child.userData.type === 'fallback' || child.userData.type === 'glass') {
-            child.position.y = (child.userData.originalY || 0) + 
-              Math.sin(elapsedTime * 0.6) * 0.02;
-            child.rotation.y = Math.sin(elapsedTime * 0.3) * 0.005 + cursorInfluenceX;
-            child.rotation.x = cursorInfluenceY * 0.3;
-          }
-        });
-      }
+			canvas.width = canvasSize;
+			canvas.height = canvasSize / 2.67;
 
-      if (textMesh) {
-        textMesh.rotation.y = Math.sin(elapsedTime * 0.15) * 0.005 + cursorInfluenceX * 0.5;
-        textMesh.rotation.x = cursorInfluenceY * 0.2;
-        textMesh.position.y = Math.sin(elapsedTime * 0.25) * 0.01;
-      }
+			const fontSize = responsiveConfig.fallbackFontSize;
+			context.fillStyle = "white";
+			context.font = `bold ${fontSize}px Arial, sans-serif`;
+			context.textAlign = "center";
+			context.textBaseline = "middle";
 
-      renderer.render(scene, camera);
-      sceneRef.current.animationId = requestAnimationFrame(render);
-    };
+			context.clearRect(0, 0, canvas.width, canvas.height);
+			context.fillText(
+				"Frontend Developer",
+				canvas.width / 2,
+				canvas.height * 0.3,
+			);
+			context.font = `bold ${fontSize * 0.75}px Arial, sans-serif`;
+			context.fillText("& UI Engineer", canvas.width / 2, canvas.height * 0.7);
 
-    render();
-  }, [shouldAnimate]);
+			const texture = new THREE.CanvasTexture(canvas);
+			texture.needsUpdate = true;
 
-  const startFadeInAnimation = useCallback(() => {
-    const duration = 2000;
-    const startTime = Date.now();
-    
-    const animateFade = () => {
-      const elapsed = Date.now() - startTime;
-      const progress = Math.min(elapsed / duration, 1.0);
-      
-      fadeProgressRef.current = progress;
-      
-      if (progress < 1.0) {
-        requestAnimationFrame(animateFade);
-      }
-    };
-    
-    fadeProgressRef.current = 0;
-    animateFade();
-  }, []);
+			const textGeometry = new THREE.PlaneGeometry(16, 6);
+			const textMaterial = new THREE.MeshBasicMaterial({
+				map: texture,
+				transparent: true,
+				opacity: 0.9,
+			});
 
-  const initThreeJS = useCallback(async () => {
-    if (!containerRef.current || !hasIntersected) return;
+			const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+			textMesh.userData = { type: "fallback", originalY: 0 };
+			group.add(textMesh);
 
-    const container = containerRef.current;
-    const rect = container.getBoundingClientRect();
-    
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, rect.width / rect.height, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ 
-      alpha: true, 
-      antialias: performanceConfig.current.quality !== 'low',
-      powerPreference: "high-performance"
-    });
-    
-    renderer.setSize(rect.width, rect.height);
-    renderer.setPixelRatio(performanceConfig.current.pixelRatio);
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
-    
-    const existingCanvas = container.querySelector('canvas');
-    if (existingCanvas) {
-      existingCanvas.remove();
-    }
-    
-    container.appendChild(renderer.domElement);
+			// Add glass effect only for medium/high quality
+			if (quality !== "low") {
+				const glassGeometry = new THREE.BoxGeometry(16.4, 6.4, 0.3);
+				const glassMesh = new THREE.Mesh(glassGeometry, material);
+				glassMesh.position.z = 0.2;
+				glassMesh.userData = { type: "glass", originalY: 0 };
+				group.add(glassMesh);
+			}
 
-    const clock = new THREE.Clock();
-    camera.position.z = 15;
-    camera.position.y = 0;
+			group.scale.setScalar(responsiveConfig.scale);
+			scene.add(group);
 
-    sceneRef.current = {
-      scene,
-      camera,
-      renderer,
-      clock,
-      lightPosition: new THREE.Vector2(0.5, 0.5),
-      isAnimating: false
-    };
+			return group;
+		},
+		[createLiquidGlassMaterial, responsiveConfig],
+	);
 
-    setupLighting(scene);
+	const createText3D = useCallback(
+		async (scene: THREE.Scene) => {
+			const group = new THREE.Group();
+			const material = createLiquidGlassMaterial();
+			const quality = performanceConfig.current.quality;
 
-    try {
-      const textMesh = await createText3D(scene);
-      sceneRef.current.textMesh = textMesh;
-      startRenderLoop();
-      setIsLoaded(true);
-      startFadeInAnimation();
-    } catch (error) {
-      console.error('Failed to create 3D text:', error);
-      const fallbackMesh = createFallbackText(scene);
-      sceneRef.current.textMesh = fallbackMesh;
-      startRenderLoop();
-      setIsLoaded(true);
-      startFadeInAnimation();
-    }
-  }, [createText3D, setupLighting, startRenderLoop, createFallbackText, startFadeInAnimation, hasIntersected]);
+			try {
+				const loader = new FontLoader();
+				const fontResponse = await fetch(
+					"https://threejs.org/examples/fonts/helvetiker_regular.typeface.json",
+				);
+				const fontData = await fontResponse.json();
+				const font = loader.parse(fontData);
 
-  const cleanup = useCallback(() => {
-    if (sceneRef.current.animationId) {
-      cancelAnimationFrame(sceneRef.current.animationId);
-    }
+				// Adjust geometry complexity based on performance
+				const curveSegments = quality === "low" ? 6 : 12;
+				const bevelSegments = quality === "low" ? 3 : 5;
 
-    if (sceneRef.current.renderer) {
-      sceneRef.current.renderer.dispose();
-      
-      if (containerRef.current) {
-        const canvas = containerRef.current.querySelector('canvas');
-        if (canvas) {
-          canvas.remove();
-        }
-      }
-    }
+				const line1Geometry = new TextGeometry("Frontend Developer", {
+					font: font,
+					size: responsiveConfig.textSize.line1,
+					depth: 0.3,
+					curveSegments,
+					bevelEnabled: quality !== "low",
+					bevelThickness: 0.05,
+					bevelSize: 0.03,
+					bevelOffset: 0,
+					bevelSegments,
+				});
 
-    if (sceneRef.current.textMesh) {
-      sceneRef.current.textMesh.traverse((child: any) => {
-        if (child.geometry) {
-          child.geometry.dispose();
-        }
-        if (child.material) {
-          if (Array.isArray(child.material)) {
-            child.material.forEach((mat: any) => mat.dispose());
-          } else {
-            child.material.dispose();
-          }
-        }
-      });
-    }
-  }, []);
+				const line2Geometry = new TextGeometry("& UI Engineer", {
+					font: font,
+					size: responsiveConfig.textSize.line2,
+					depth: 0.25,
+					curveSegments,
+					bevelEnabled: quality !== "low",
+					bevelThickness: 0.04,
+					bevelSize: 0.025,
+					bevelOffset: 0,
+					bevelSegments,
+				});
 
-  const handleMouseMove = useCallback((event: React.MouseEvent) => {
-    if (!containerRef.current || !sceneRef.current.lightPosition || !isIntersecting) return;
+				// Center geometries
+				line1Geometry.computeBoundingBox();
+				const line1Box = line1Geometry.boundingBox;
+				if (line1Box) {
+					line1Geometry.translate(
+						-(line1Box.max.x + line1Box.min.x) / 2,
+						2.0,
+						-(line1Box.max.z + line1Box.min.z) / 2,
+					);
+				}
 
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = (event.clientX - rect.left) / rect.width;
-    const y = 1.0 - (event.clientY - rect.top) / rect.height;
-    
-    sceneRef.current.lightPosition.set(x, y);
-    
-    if (sceneRef.current.interactiveLight) {
-      const worldX = (x - 0.5) * 8;
-      const worldY = (y - 0.5) * 5;
-      sceneRef.current.interactiveLight.position.set(worldX, worldY, 3);
-      
-      const centerDistance = Math.sqrt(Math.pow(x - 0.5, 2) + Math.pow(y - 0.5, 2));
-      sceneRef.current.interactiveLight.intensity = 1.5 + (1 - centerDistance * 2) * 1.5;
-    }
-  }, [isIntersecting]);
+				line2Geometry.computeBoundingBox();
+				const line2Box = line2Geometry.boundingBox;
+				if (line2Box) {
+					line2Geometry.translate(
+						-(line2Box.max.x + line2Box.min.x) / 2,
+						-2.0,
+						-(line2Box.max.z + line2Box.min.z) / 2,
+					);
+				}
 
-  const handleResize = useCallback(() => {
-    if (!containerRef.current || !sceneRef.current.camera || !sceneRef.current.renderer) return;
+				const line1Mesh = new THREE.Mesh(line1Geometry, material.clone());
+				const line2Mesh = new THREE.Mesh(line2Geometry, material.clone());
 
-    const rect = containerRef.current.getBoundingClientRect();
-    sceneRef.current.camera.aspect = rect.width / rect.height;
-    sceneRef.current.camera.updateProjectionMatrix();
-    sceneRef.current.renderer.setSize(rect.width, rect.height, false);
-  }, []);
+				line1Mesh.userData = { type: "text", line: 1 };
+				line2Mesh.userData = { type: "text", line: 2 };
 
-  // Initialize only when component becomes visible
-  useEffect(() => {
-    if (!hasIntersected || typeof window === 'undefined') return;
+				group.add(line1Mesh);
+				group.add(line2Mesh);
+			} catch (error) {
+				console.warn("Failed to load font, using fallback text shapes:", error);
+				setLoadingError(true);
+				return createFallbackText(scene);
+			}
 
-    const timeoutId = setTimeout(() => {
-      initThreeJS();
-    }, 100);
+			group.scale.setScalar(responsiveConfig.scale);
+			scene.add(group);
 
-    return () => {
-      clearTimeout(timeoutId);
-      cleanup();
-    };
-  }, [initThreeJS, cleanup, hasIntersected]);
+			return group;
+		},
+		[createLiquidGlassMaterial, createFallbackText, responsiveConfig],
+	);
 
-  useEffect(() => {
-    const handleResizeEvent = () => handleResize();
-    window.addEventListener('resize', handleResizeEvent);
-    return () => window.removeEventListener('resize', handleResizeEvent);
-  }, [handleResize]);
+	const startRenderLoop = useCallback(() => {
+		const render = () => {
+			// Only render if component is visible
+			if (!shouldAnimate()) {
+				sceneRef.current.animationId = requestAnimationFrame(render);
+				return;
+			}
 
-  // Pause/resume animation based on visibility
-  useEffect(() => {
-    if (!sceneRef.current.clock) return;
-    
-    if (isIntersecting) {
-      sceneRef.current.clock.start();
-    } else {
-      sceneRef.current.clock.stop();
-    }
-  }, [isIntersecting]);
+			const {
+				scene,
+				camera,
+				renderer,
+				textMesh,
+				clock,
+				lightPosition,
+				targetLightPosition,
+				isMouseInside,
+			} = sceneRef.current;
 
-  return (
-    <div 
-      ref={containerRef}
-      className={`relative w-full h-96 ${className}`}
-      onMouseMove={handleMouseMove}
-      style={{ 
-        background: 'transparent',
-        overflow: 'hidden'
-      }}
-    >
+			if (
+				!scene ||
+				!camera ||
+				!renderer ||
+				!clock ||
+				!lightPosition ||
+				!targetLightPosition
+			)
+				return;
 
-      {loadingError && isLoaded && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-white/70 text-lg">Frontend Developer & UI Engineer</div>
-        </div>
-      )}
-    </div>
-  );
+			const elapsedTime = clock.getElapsedTime();
+
+			// Smooth interpolation of light position
+			const lerpSpeed = 0.05; // Adjust this value to control transition speed (0.01 = slow, 0.1 = fast)
+
+			if (isMouseInside) {
+				// When mouse is inside, interpolate towards target position
+				lightPosition.lerp(targetLightPosition, lerpSpeed * 2); // Faster when following mouse
+			} else {
+				// When mouse is outside, smoothly move to center
+				const centerPosition = new THREE.Vector2(0.5, 0.5);
+				lightPosition.lerp(centerPosition, lerpSpeed);
+			}
+
+			// Calculate cursor influence using smoothed position
+			const cursorX = lightPosition.x;
+			const cursorY = lightPosition.y;
+			const cursorInfluenceX = (cursorX - 0.5) * 0.1;
+			const cursorInfluenceY = (cursorY - 0.5) * 0.05;
+
+			// Animate text meshes
+			if (textMesh?.children) {
+				textMesh.children.forEach((child: THREE.Object3D) => {
+					const mesh = child as THREE.Mesh;
+					if (mesh.material && "uniforms" in mesh.material) {
+						const material = mesh.material as THREE.ShaderMaterial;
+						material.uniforms.time.value = elapsedTime;
+						material.uniforms.lightPosition.value = lightPosition;
+						material.uniforms.fadeInProgress.value = fadeProgressRef.current;
+					}
+
+					if (child.userData.type === "text") {
+						const lineOffset = child.userData.line === 2 ? Math.PI * 0.5 : 0;
+						child.position.y =
+							(child.userData.originalY || 0) +
+							Math.sin(elapsedTime * 0.8 + lineOffset) * 0.03;
+						child.rotation.y =
+							Math.sin(elapsedTime * 0.4) * 0.01 + cursorInfluenceX;
+						child.rotation.x = cursorInfluenceY * 0.5;
+					} else if (
+						child.userData.type === "fallback" ||
+						child.userData.type === "glass"
+					) {
+						child.position.y =
+							(child.userData.originalY || 0) +
+							Math.sin(elapsedTime * 0.6) * 0.02;
+						child.rotation.y =
+							Math.sin(elapsedTime * 0.3) * 0.005 + cursorInfluenceX;
+						child.rotation.x = cursorInfluenceY * 0.3;
+					}
+				});
+			}
+
+			if (textMesh) {
+				textMesh.rotation.y =
+					Math.sin(elapsedTime * 0.15) * 0.005 + cursorInfluenceX * 0.5;
+				textMesh.rotation.x = cursorInfluenceY * 0.2;
+				textMesh.position.y = Math.sin(elapsedTime * 0.25) * 0.01;
+			}
+
+			// Update interactive light with smoothed position
+			if (sceneRef.current.interactiveLight) {
+				const worldX = (cursorX - 0.5) * 8;
+				const worldY = (cursorY - 0.5) * 5;
+				sceneRef.current.interactiveLight.position.set(worldX, worldY, 3);
+
+				const centerDistance = Math.sqrt(
+					(cursorX - 0.5) ** 2 + (cursorY - 0.5) ** 2,
+				);
+				sceneRef.current.interactiveLight.intensity =
+					1.5 + (1 - centerDistance * 2) * 1.5;
+			}
+
+			renderer.render(scene, camera);
+			sceneRef.current.animationId = requestAnimationFrame(render);
+		};
+
+		render();
+	}, [shouldAnimate]);
+
+	const startFadeInAnimation = useCallback(() => {
+		const duration = 2000;
+		const startTime = Date.now();
+
+		const animateFade = () => {
+			const elapsed = Date.now() - startTime;
+			const progress = Math.min(elapsed / duration, 1.0);
+
+			fadeProgressRef.current = progress;
+
+			if (progress < 1.0) {
+				requestAnimationFrame(animateFade);
+			}
+		};
+
+		fadeProgressRef.current = 0;
+		animateFade();
+	}, []);
+
+	const initThreeJS = useCallback(async () => {
+		if (!containerRef.current || !hasIntersected) return;
+
+		const container = containerRef.current;
+		const rect = container.getBoundingClientRect();
+
+		const scene = new THREE.Scene();
+		const camera = new THREE.PerspectiveCamera(
+			75,
+			rect.width / rect.height,
+			0.1,
+			1000,
+		);
+		const renderer = new THREE.WebGLRenderer({
+			alpha: true,
+			antialias: performanceConfig.current.quality !== "low",
+			powerPreference: "high-performance",
+		});
+
+		renderer.setSize(rect.width, rect.height);
+		renderer.setPixelRatio(performanceConfig.current.pixelRatio);
+		renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+		const existingCanvas = container.querySelector("canvas");
+		if (existingCanvas) {
+			existingCanvas.remove();
+		}
+
+		container.appendChild(renderer.domElement);
+
+		const clock = new THREE.Clock();
+		camera.position.z = responsiveConfig.cameraDistance;
+		camera.position.y = 0;
+
+		sceneRef.current = {
+			scene,
+			camera,
+			renderer,
+			clock,
+			lightPosition: new THREE.Vector2(0.5, 0.5),
+			targetLightPosition: new THREE.Vector2(0.5, 0.5),
+			isAnimating: false,
+			isMouseInside: false,
+		};
+
+		setupLighting(scene);
+
+		try {
+			const textMesh = await createText3D(scene);
+			sceneRef.current.textMesh = textMesh;
+			startRenderLoop();
+			setIsLoaded(true);
+			startFadeInAnimation();
+		} catch (error) {
+			console.error("Failed to create 3D text:", error);
+			const fallbackMesh = createFallbackText(scene);
+			sceneRef.current.textMesh = fallbackMesh;
+			startRenderLoop();
+			setIsLoaded(true);
+			startFadeInAnimation();
+		}
+	}, [
+		createText3D,
+		setupLighting,
+		startRenderLoop,
+		createFallbackText,
+		startFadeInAnimation,
+		hasIntersected,
+		responsiveConfig,
+	]);
+
+	const cleanup = useCallback(() => {
+		if (sceneRef.current.animationId) {
+			cancelAnimationFrame(sceneRef.current.animationId);
+		}
+
+		// Clear resize timeout
+		if (resizeTimeoutRef.current) {
+			clearTimeout(resizeTimeoutRef.current);
+		}
+
+		if (sceneRef.current.renderer) {
+			sceneRef.current.renderer.dispose();
+
+			if (containerRef.current) {
+				const canvas = containerRef.current.querySelector("canvas");
+				if (canvas) {
+					canvas.remove();
+				}
+			}
+		}
+
+		if (sceneRef.current.textMesh) {
+			sceneRef.current.textMesh.traverse((child: THREE.Object3D) => {
+				const mesh = child as THREE.Mesh;
+				if (mesh.geometry) {
+					mesh.geometry.dispose();
+				}
+				if (mesh.material) {
+					if (Array.isArray(mesh.material)) {
+						mesh.material.forEach((mat: THREE.Material) => mat.dispose());
+					} else {
+						mesh.material.dispose();
+					}
+				}
+			});
+		}
+	}, []);
+
+	const handleMouseMove = useCallback(
+		(event: React.MouseEvent) => {
+			if (
+				!containerRef.current ||
+				!sceneRef.current.targetLightPosition ||
+				!isIntersecting
+			)
+				return;
+
+			const rect = containerRef.current.getBoundingClientRect();
+			const x = (event.clientX - rect.left) / rect.width;
+			const y = 1.0 - (event.clientY - rect.top) / rect.height;
+
+			// Update target position for smooth interpolation
+			sceneRef.current.targetLightPosition.set(x, y);
+			sceneRef.current.isMouseInside = true;
+		},
+		[isIntersecting],
+	);
+
+	const handleMouseEnter = useCallback(() => {
+		if (sceneRef.current) {
+			sceneRef.current.isMouseInside = true;
+		}
+	}, []);
+
+	const handleMouseLeave = useCallback(() => {
+		if (sceneRef.current) {
+			sceneRef.current.isMouseInside = false;
+		}
+	}, []);
+
+	const handleResize = useCallback(() => {
+		// Clear any existing timeout to debounce resize events
+		if (resizeTimeoutRef.current) {
+			clearTimeout(resizeTimeoutRef.current);
+		}
+
+		resizeTimeoutRef.current = setTimeout(() => {
+			if (
+				!containerRef.current ||
+				!sceneRef.current.camera ||
+				!sceneRef.current.renderer
+			)
+				return;
+
+			// Update responsive config based on new window size
+			const newResponsiveConfig = getResponsiveConfig();
+			setResponsiveConfig(newResponsiveConfig);
+
+			const rect = containerRef.current.getBoundingClientRect();
+			sceneRef.current.camera.aspect = rect.width / rect.height;
+			sceneRef.current.camera.position.z = newResponsiveConfig.cameraDistance;
+			sceneRef.current.camera.updateProjectionMatrix();
+			sceneRef.current.renderer.setSize(rect.width, rect.height, false);
+
+			// Update text mesh scale if it exists - but preserve fade state
+			if (sceneRef.current.textMesh && fadeProgressRef.current > 0) {
+				sceneRef.current.textMesh.scale.setScalar(newResponsiveConfig.scale);
+			}
+		}, 150); // Debounce by 150ms to prevent flashing
+	}, []);
+
+	// Initialize only when component becomes visible
+	useEffect(() => {
+		if (!hasIntersected || typeof window === "undefined") return;
+
+		const timeoutId = setTimeout(() => {
+			initThreeJS();
+		}, 100);
+
+		return () => {
+			clearTimeout(timeoutId);
+			cleanup();
+		};
+	}, [initThreeJS, cleanup, hasIntersected]); // Removed responsiveConfig dependency to prevent re-initialization
+
+	useEffect(() => {
+		const handleResizeEvent = () => handleResize();
+		window.addEventListener("resize", handleResizeEvent);
+		return () => window.removeEventListener("resize", handleResizeEvent);
+	}, [handleResize]);
+
+	// Pause/resume animation based on visibility
+	useEffect(() => {
+		if (!sceneRef.current.clock) return;
+
+		if (isIntersecting) {
+			sceneRef.current.clock.start();
+		} else {
+			sceneRef.current.clock.stop();
+		}
+	}, [isIntersecting]);
+
+	return (
+		<div
+			ref={containerRef}
+			className={`relative w-full cursor-crosshair ${className}`}
+			onMouseMove={handleMouseMove}
+			onMouseEnter={handleMouseEnter}
+			onMouseLeave={handleMouseLeave}
+			role="img"
+			aria-label="Interactive 3D text: Frontend Developer & UI Engineer"
+			style={{
+				background: "transparent",
+				overflow: "hidden",
+				height: responsiveConfig.containerHeight,
+			}}
+		>
+			{loadingError && isLoaded && (
+				<div className="absolute inset-0 flex items-center justify-center">
+					<div className="text-white/70 text-lg sm:text-base md:text-lg lg:text-xl xl:text-2xl">
+						Frontend Developer & UI Engineer
+					</div>
+				</div>
+			)}
+		</div>
+	);
 }

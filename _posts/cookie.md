@@ -1,36 +1,59 @@
 ---
-title: Cookie 是什麼？如何設定？
+title: Cookie 的基本概念與使用
+date: 2022-08-23 10:00:00
 tags:
+- http
 - cookie
-- web 基礎
+- web
 categories:
 - 前端
+- 網路
 ---
-由於 HTTP 是無狀態的，因此每一個 Request 不相關，Server 會無法辨識是否為同個使用者。
 
-而 Cookie 存在的目的就是為了讓 Server 能辨識使用者，透過 Cookie 這個**儲存在瀏覽器的小型文字檔案**，Server 便能辨識不同的 Request 是否來自同個使用者。
+## 什麼是 Cookie？
 
-透過讓 Server 發送 Cookie 給瀏覽器，而瀏覽器將 Cookie 儲存起來，以便讓 Server 能辨識使用者。
+HTTP 是一個**無狀態 (stateless)** 的協定，這意味著伺服器不會記住任何關於使用者的資訊。為了解決這個問題，Cookie 就誕生了。
 
-在 Server 發送 設定 Cookie 的 response 給 Client 端之後，Client 發送到 Server 的 request 的 header 中會帶上 cookie。
+Cookie 是一個儲存在瀏覽器中的小型文字檔案，它會在瀏覽器發送請求給伺服器時，一併被帶上。伺服器可以透過 Cookie 來辨識不同的使用者，並記住他們的狀態，例如登入資訊、購物車內容等。
 
+## Cookie 的運作方式
 
 ```mermaid
 graph LR
-A[Client] -- rquest --> B[Server]
-B -- Response with setCookie --> A
+    A[Client] -- 第一次請求 --> B[Server]
+    B -- 回應 + Set-Cookie header --> A
+    A -- 儲存 Cookie --> A
+    A -- 之後的請求 + Cookie header --> B
+    B -- 辨識使用者 --> B
 ```
-```mermaid
-graph LR
-A[Client] -- rquest with Cookie --> B[Server]
-B -- 可以辨識使用者 --> A
-```
-在 php 實作中，可以用 `setcookie()` 來設定 cookie，可參考此範例：
-`setcookie("cookie 名稱", cookie 參數, 失效時間)`
-`time()` 會回傳現在時間
-```php=
-  <?php
-  $expire = time() + 3600 * 24 * 30;  //沒設時間會很快失效
-  setcookie("username", $username, $expire)
+
+1.  當瀏覽器第一次發送請求給伺服器時，伺服器會在回應的 header 中加上一個 `Set-Cookie` 的欄位，並在裡面放入要儲存的 Cookie 資料。
+2.  瀏覽器收到回應後，會將 Cookie 儲存起來。
+3.  之後瀏覽器再發送請求給同一個伺服器時，就會在請求的 header 中加上一個 `Cookie` 的欄位，並將之前儲存的 Cookie 資料放進去。
+4.  伺服器收到請求後，就可以透過 `Cookie` 欄位中的資料來辨識使用者。
+
+## Cookie 的屬性
+
+在 `Set-Cookie` header 中，我們可以設定 Cookie 的一些屬性，來控制 Cookie 的行為：
+
+-   **`Expires` / `Max-Age`**: 設定 Cookie 的過期時間。`Expires` 是設定一個絕對的日期和時間，而 `Max-Age` 是設定一個相對的秒數。
+-   **`Path`**: 設定 Cookie 在哪個路徑下才會被送出。
+-   **`Domain`**: 設定 Cookie 在哪個網域下才會被送出。
+-   **`Secure`**: 如果設定了這個屬性，Cookie 只會在 HTTPS 連線中被送出。
+-   **`HttpOnly`**: 如果設定了這個屬性，Cookie 將無法被 JavaScript 的 `document.cookie` API 所存取，可以有效地防止 XSS 攻擊。
+
+## PHP 範例
+
+在 PHP 中，我們可以使用 `setcookie()` 函式來設定 Cookie：
+
+```php
+<?php
+
+$cookie_name = "user";
+$cookie_value = "John Doe";
+$expire = time() + (86400 * 30); // 86400 = 1 day
+
+setcookie($cookie_name, $cookie_value, $expire, "/", "", false, true);
+
 ?>
 ```

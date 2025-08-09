@@ -1,93 +1,51 @@
 ---
-title: 演算法筆記
+title: 演算法基礎：複雜度與 Big O 表示法
+date: 2022-09-19 10:00:00
 tags:
-- 資料結構
-- 演算法
+- algorithm
+- complexity
+- big-o
 categories:
 - 演算法
-date: 2022-05-14
-
 ---
-#### What is Algorithm?
-##### 演算法的定義
-* Algorithm is a finite sequence of well-defined, computer-implementable instructions, typically to solve a class of problems or to perform a computation.
-* Easy speaking, algorithm is a step-by-step procedure to solve a problem.
 
-有限的連續性事情，有完整定義，電腦可以執行，是用來解決一個問題或計算某些值。
-一步一步去解決問題的程序，就可叫做演算法。
+## 什麼是演算法？
 
-##### 現實生活中的演算法:
-- Google Maps 的路徑規劃
-- YouTube 的推薦影片
-- Excel 的數字排列
+演算法是一系列為了解決特定問題而設計的指令。一個好的演算法應該是有效率的，也就是說，它應該在合理的時間內完成，並且不會佔用太多的記憶體。
 
-#### Comparing Algorithm
-##### 為什麼要比較演算法？
-比較速度、記憶體資源
-- Time
-- Space
+## 複雜度 (Complexity)
 
-現實情況中用計時方式來評估演算法時間效率並不實際，為什麼？
-- 同個電腦上會得到不同的結果
-- 不同電腦會給出不同的結果
+我們使用**複雜度**來衡量一個演算法的效率。複雜度可以分為兩種：
 
-#### Complexity 複雜度
+-   **時間複雜度 (Time Complexity):** 衡量演算法執行所需的時間。
+-   **空間複雜度 (Space Complexity):** 衡量演算法執行所需的記憶體空間。
 
-需要用到多少 operations？ => 直接影響
+## Big O 表示法
 
-$f(n) = n^2+3n+4$
-n 為 input size
-複雜度為
+Big O 表示法是一種用來描述演算法時間複雜度的數學表示法。它描述了當輸入資料量增加時，演算法執行時間的增長趨勢。
+
+**常見的 Big O:**
+
+-   **O(1) (常數時間):** 執行時間是固定的，不會因為輸入資料量的增加而改變。
+-   **O(log n) (對數時間):** 執行時間會隨著輸入資料量的增加而緩慢增加。
+-   **O(n) (線性時間):** 執行時間會隨著輸入資料量的增加而線性增加。
+-   **O(n log n) (線性對數時間):** 執行時間的增長速度介於線性和平方之間。
+-   **O(n^2) (平方時間):** 執行時間會隨著輸入資料量的增加而平方增加。
 
 ![](https://i.imgur.com/yXWn5c6.png)
-![](https://i.imgur.com/NVyph3L.png)
 
-$f(n)$ 與 $n$ have quadrctic relations.
-有平方的關係
+## 陣列和物件的複雜度
 
-設計演算法時應考慮避免把時間複雜度太高。
+### 物件 (Object)
 
-#### Big O Notation
-##### 定義
-- Big O Notation is atool that describe the limiting behavior of a function when the argument tends towards a particular value or infinity.
-- Big O Notation has a "worst case scenario", which means it shows the general trends of complexity when the size of inputs is extremely large.
+-   **插入 (Insertion):** O(1)
+-   **移除 (Removal):** O(1)
+-   **搜尋 (Searching):** O(n)
+-   **存取 (Accessing):** O(1)
 
-Big O Notation 是用來描述 的工具
-n 不斷擴大時，會走去哪裡
-有一個最壞的情況的打算
-Big O Notation 會展示演算法的趨勢，當 size 到極大時，它的趨勢是什麼
+### 陣列 (Array)
 
-##### Calculating Big O Value
-1. Constant doesn't matter 常數不重要
-2. Small Terms don't matter 較小的
-3. Longarithm Base doesn't matter 底數（log 的）不重要
-
-$f(n) = 5n^2+3n+4$ => 只需要考慮 $5n^2$
-
-#### Asymptotic Notation
-Big O Omega 定義最低限度是多低
-Big Theta
-
-Big O 定義：
-The function $f(n)=O(g(n)) iff  c, n0 s.t. 0 <= f(n)$ 
-
-desmos 繪圖計算機
-![](https://i.imgur.com/VL8viAa.png)
-
-#### Analysis of Arrays and Objects
-Object：
-Insertion $O(1)$
-Removal  $O(1)$
-Searching $O(n)$
-Acessing $O(1)$
-
-hash Table  => 因此找到 Object 內的資料無論多龐大都是 $O(1)$
-
-Array：
-Insertion push = $O(1)$ unshift = $O(n)$
-Removal  pop = $O(1)$ shift = $O(n)$
-Searching $O(n)$
-Acessing $O(1)$
-
-因為 array 有 index，因此在最前面新增會需要更改所有的 index
-## 
+-   **插入 (Insertion):** `push` 是 O(1)，`unshift` 是 O(n)
+-   **移除 (Removal):** `pop` 是 O(1)，`shift` 是 O(n)
+-   **搜尋 (Searching):** O(n)
+-   **存取 (Accessing):** O(1)

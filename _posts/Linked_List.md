@@ -1,55 +1,84 @@
 ---
-title: Linked List
+title: 資料結構：鏈結串列 (Linked List)
+date: 2022-09-07 10:00:00
 tags:
-- 資料結構
+- data-structure
+- linked-list
+- algorithm
 categories:
 - 演算法
+- 資料結構
 ---
-###### tags: `資料結構與演算法`
-Linked List 類似 Array
+
+## 什麼是鏈結串列 (Linked List)？
+
+鏈結串列是一種線性的資料結構，它由一系列的**節點 (node)** 組成。每個節點都包含兩個部分：
+
+-   **資料 (Data):** 儲存節點的值。
+-   **指標 (Pointer):** 指向串列中的下一個節點。
+
 ```mermaid
 graph LR
-
-A -- next --> B --> C --> D --> Null
-
-A(nodeA)
-B(nodeB)
-C(nodeC)
-D(nodeD)
+    A[Node A] -- next --> B[Node B] -- next --> C[Node C] -- next --> Null
 ```
-```javascript=
-function LinkedNode(val, next) {
-  this.val = val || -1
-  this.next = next || null
+
+## 鏈結串列的類型
+
+-   **單向鏈結串列 (Singly Linked List):** 每個節點只包含一個指向下一個節點的指標。
+-   **雙向鏈結串列 (Doubly Linked List):** 每個節點包含兩個指標，一個指向上一個節點，另一個指向下一個節點。
+
+## 鏈結串列的優點和缺點
+
+**優點:**
+
+-   **動態大小:** 鏈結串列的大小可以動態地增加或減少。
+-   **插入和刪除容易:** 在鏈結串列中插入或刪除節點非常有效率。
+
+**缺點:**
+
+-   **隨機存取不易:** 無法像陣列一樣透過索引來直接存取節點，必須從頭開始遍歷。
+-   **需要額外的記憶體:** 每個節點都需要額外的記憶體來儲存指標。
+
+## JavaScript 實作
+
+```javascript
+class Node {
+  constructor(data) {
+    this.data = data;
+    this.next = null;
+  }
 }
 
-let list = new LinkedNode
+class LinkedList {
+  constructor() {
+    this.head = null;
+  }
 
-let currentNode = list
-while(current)
+  add(data) {
+    const newNode = new Node(data);
+    if (!this.head) {
+      this.head = newNode;
+    } else {
+      let current = this.head;
+      while (current.next) {
+        current = current.next;
+      }
+      current.next = newNode;
+    }
+  }
 
-```
-- 優點
-  + 可以無限增加元素
-  + 執行插入跟刪除時特別快
-- 缺點
-  + 需要更多的 memory
-  + 一定要從頭開始讀，儲存方式是不連續的（記憶體位置分散）
-  + 反向讀取的話會很麻煩
+  print() {
+    let current = this.head;
+    while (current) {
+      console.log(current.data);
+      current = current.next;
+    }
+  }
+}
 
-#### Doubly Linked List : 進階的 Linked List
-
-有往回指的屬性
-```mermaid
-graph LR
-
-A --> B -- next --> C --> D --> E
-D --> C --> B --> A
-A --> F 
-A(nodeA)
-B(nodeB)
-C(nodeC)
-D(nodeD)
-E[null]
-F[null]
+const list = new LinkedList();
+list.add(1);
+list.add(2);
+list.add(3);
+list.print(); // 1, 2, 3
 ```

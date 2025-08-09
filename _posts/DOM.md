@@ -1,28 +1,62 @@
 ---
-title: DOM
+title: DOM (文件物件模型) 詳解
+date: 2022-09-12 10:00:00
 tags:
-- DOM
-- 瀏覽器
+- javascript
+- dom
+- web
 categories:
 - 前端
+- JavaScript
 ---
-DOM 為 Document Object Model 的縮寫，中文為文件物件模型。
 
-透過 DOM，可以將 html 文件以**物件**的形式提供給程式進行存取，進而可以改變 html 的架構、style 以及內容。而這個物件是根據 html 中的標籤所建立出的樹狀結構，html 中的標籤在樹狀結構上會以**節點**表示。DOM 的樹狀結構可參考下圖：
+## 什麼是 DOM？
+
+DOM (Document Object Model) 是 W3C 所制定的標準，它將整個 HTML 文件轉換成一個由**節點 (node)** 組成的樹狀結構。JavaScript 可以透過 DOM API 來存取和操作文件中的任何元素，例如改變元素的內容、樣式、結構等。
 
 ![](https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/DOM-model.svg/330px-DOM-model.svg.png)
 
-有了 DOM 之後，Javascript 便可以呼叫 DOM API 來對 html 文件內容進行操作。
+## 選取 DOM 元素
 
-如果要透過 DOM API 取得元素內容，可以使用以下幾種方式：
-1. `document.getElementById("elementID")`
-依據元素 ID 取得元素
-2. `document.getElementsByTagName("elementTagName")`
-依據標籤選取所有符合的元素
-3. `document.getElementByClassName("elementClassName")`
-依據 Class 選取所有符合的元素
-4. `document.querySelector(".elementClass")`
-使用 CSS 選擇器的方式選取元素，只會選取到符合的第一個元素
-5. `document.querySelectorAll("div")`
-使用 CSS 選擇器的方式選取所有符合的元素
+-   `document.getElementById(id)`: 透過 ID 選取元素。
+-   `document.getElementsByTagName(tagName)`: 透過標籤名稱選取元素。
+-   `document.getElementsByClassName(className)`: 透過 class 名稱選取元素。
+-   `document.querySelector(selector)`: 透過 CSS 選擇器選取第一個符合的元素。
+-   `document.querySelectorAll(selector)`: 透過 CSS 選擇器選取所有符合的元素。
 
+## 操作 DOM 元素
+
+### 修改元素內容
+
+-   `element.innerHTML`: 取得或設定元素的 HTML 內容。
+-   `element.textContent`: 取得或設定元素的文字內容。
+
+### 修改元素樣式
+
+-   `element.style.property = value`: 設定元素的 CSS 樣式。
+
+### 修改元素屬性
+
+-   `element.getAttribute(attributeName)`: 取得元素的屬性值。
+-   `element.setAttribute(attributeName, value)`: 設定元素的屬性值。
+
+### 新增和刪除元素
+
+-   `document.createElement(tagName)`: 建立一個新的元素。
+-   `parentElement.appendChild(childElement)`: 將一個子元素附加到父元素的最後。
+-   `parentElement.removeChild(childElement)`: 從父元素中移除一個子元素。
+
+**範例：**
+
+```html
+<div id="container">
+  <p>Hello</p>
+</div>
+
+<script>
+  const container = document.getElementById('container');
+  const newP = document.createElement('p');
+  newP.textContent = 'World';
+  container.appendChild(newP);
+</script>
+```

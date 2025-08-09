@@ -1,59 +1,49 @@
 ---
-title: HTTP
+title: HTTP 協定入門
+date: 2022-09-09 10:00:00
 tags:
-- web 基礎
+- http
+- web
+- protocol
 categories:
-- 前端
+- 網路
+- 後端
 ---
-## 為甚麼需要協定（protocol）
-標準 -> 規模化
 
-## HTTP 是啥？
-HTTP（HyperText Transfer Protocol）是全球資訊網資料通訊的基礎。
+## 什麼是 HTTP？
 
-### HTTP request 的一生
+HTTP (HyperText Transfer Protocol) 是一種用於在網路上傳輸超文本 (例如 HTML) 的**應用層協定**。它是全球資訊網 (World Wide Web) 的基礎。
 
-Charles 可以看瀏覽器
+## HTTP 的請求/回應模型
 
-瀏覽器 -> 製造 request -> 傳給 server
-server -> 處理 -> 傳 response 回來
+HTTP 是一個**客戶端-伺服器端 (client-server)** 的協定。客戶端 (通常是瀏覽器) 會發送一個 **HTTP 請求 (request)** 給伺服器，伺服器會回傳一個 **HTTP 回應 (response)**。
 
-### DNS Domain Name System
+### HTTP 請求
 
-![](https://i.imgur.com/RDqYXFe.png)
+一個 HTTP 請求包含了以下幾個部分：
 
-`nslookup github.com` 查看 github 的 IP 位置
+-   **請求行 (Request Line):** 包含了請求的方法 (例如 `GET`、`POST`)、請求的 URL 和 HTTP 的版本。
+-   **請求標頭 (Request Headers):** 包含了關於請求的額外資訊，例如 `Host`、`User-Agent`、`Accept` 等。
+-   **請求主體 (Request Body):** 包含了要傳送給伺服器的資料，例如表單資料。
 
-### 瀏覽器
-1. 發 request 到 DNS
-2. 拿到 response 渲染
-3. 根據回傳的 html 把資源下載
+### HTTP 回應
 
-沒有瀏覽器一樣可以拿到 response
-#### Request - Simplified HTTP client 
-`npm install request`
+一個 HTTP 回應包含了以下幾個部分：
 
-### Header 與 Body
-#### Header
-額外資訊
-#### Body
-主要內容
+-   **狀態行 (Status Line):** 包含了 HTTP 的版本、狀態碼 (例如 `200 OK`、`404 Not Found`) 和狀態訊息。
+-   **回應標頭 (Response Headers):** 包含了關於回應的額外資訊，例如 `Content-Type`、`Content-Length`、`Set-Cookie` 等。
+-   **回應主體 (Response Body):** 包含了伺服器回傳的資料，例如 HTML 文件、JSON 資料等。
 
-### GET 與 POST
-#### GET
+## HTTP 方法
 
-#### POST
-要執行一些動作（例如登入）
-`GET`：GET 方法請求展示指定資源。使用 GET 的請求只應用於取得資料。
-`HEAD`：HEAD 方法請求與 GET 方法相同的回應，但它沒有回應主體（response body）。
-`POST`：POST 方法用於提交指定資源的實體，通常會改變伺服器的狀態或副作用（side effect）。
-`PUT`：PUT 方法會取代指定資源所酬載請求（request payload）的所有表現。
-`DELETE`：DELETE 方法會刪除指定資源。
-`PATCH`：PATCH 方法套用指定資源的部份修改。
-[HTTP 請求方法](https://developer.mozilla.org/zh-TW/docs/Web/HTTP/Methods)
+-   **`GET`**: 取得資源。
+-   **`POST`**: 建立資源。
+-   **`PUT`**: 更新資源。
+-   **`DELETE`**: 刪除資源。
 
-### HTTP 狀態碼
-[HTTP 狀態碼](https://developer.mozilla.org/zh-TW/docs/Web/HTTP/Status)
+## HTTP 狀態碼
 
-301：永久移動到新位置
-302：暫時
+-   **`2xx` (成功):** `200 OK`, `201 Created`
+-   **`3xx` (重新導向):** `301 Moved Permanently`, `302 Found`
+-   **`4xx` (客戶端錯誤):** `400 Bad Request`, `401 Unauthorized`, `404 Not Found`
+-   **`5xx` (伺服器端錯誤):** `500 Internal Server Error`, `503 Service Unavailable`

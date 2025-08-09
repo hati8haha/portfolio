@@ -1,122 +1,101 @@
 ---
-title: 建立 cesium React 專案
-date: 2022-08-12 21:43:30
+title: 在 React 專案中整合 Cesium
+date: 2022-08-24 10:00:00
 tags:
 - react
 - cesium
 - resium
-categories: 
+- vite
+- craco
+categories:
 - 前端
+- React
+- GIS
 ---
 
+[Cesium](https://cesium.com/) 是一個用於建立 3D 地球和地圖的開源 JavaScript 函式庫。在 React 專案中整合 Cesium，可以讓我們建立出功能強大且互動性高的地理資訊應用程式。
 
-<details><summary>優缺點</summary>
-<p>
+本文將介紹兩種在 React 專案中整合 Cesium 的方法：使用 [Resium](https://resium.reearth.io/)，以及直接使用原生的 Cesium API。
 
-* 優點：模組累積數個專案經驗，有已經客製好的功能模組可用。具備擴充彈性。
-* 缺點：模組目前綁定固定功能，當模組持續擴充，可能會過於冗贅，如何管控和持續維護是要考量的點。
+## 使用 Resium
 
-</p>
-</details>
+Resium 是一個將 Cesium 的 API 封裝成 React 元件的函式庫。它可以讓我們用更 “React” 的方式來操作 Cesium，並且可以更好地與 React 的生命週期和狀態管理整合。
 
-用原生 Cesium 寫的模組結合 React 元件使用，建議直接引用 GIAP `/core` 中的模組檔案。
+**優點:**
 
-## [Resium](https://resium.reearth.io/)
+-   以 React 元件的方式操作 Cesium，與 React 整合度高。
+-   程式碼更簡潔、易讀。
 
+**缺點:**
 
-<details><summary>優缺點</summary>
-<p>
-* 優點：能以 React 元件方式寫 Cesium，與 React 整合度較高
-* 缺點：社群使用量不多，需考慮是否有潛在 bug 或因封裝而功能受限。
+-   社群規模較小，可能會遇到一些未知的 bug。
+-   功能受限於 Resium 的封裝，可能無法使用到 Cesium 的所有功能。
 
-</p>
-</details>
+## 使用原生 Cesium API
 
-Resium 是提供 Cesium React 元件函式庫，讓 Cesium 模組可以元件化使用。
+我們也可以直接在 React 專案中使用原生的 Cesium API。這種方式可以讓我們完全掌控 Cesium 的所有功能，但需要我們自己處理 Cesium 的初始化和與 React 的整合。
 
-[Resium 文件](https://resium.reearth.io)
+**優點:**
 
+-   可以使用 Cesium 的所有功能，彈性最大。
+-   可以累積自己的 Cesium 模組，方便在不同專案中重複使用。
 
-## 流程
+**缺點:**
 
-### create react app
+-   需要自己處理與 React 的整合，較為複雜。
+-   如果模組設計不當，可能會變得過於冗贅，難以維護。
 
-* 缺點：開發時 hot reload 速度慢
+## 專案建立流程
 
+### 使用 Create React App
 
-1. 建立 react ts 專案
+1.  **建立專案:**
+    ```bash
+    yarn create react-app my-cesium-app --template typescript
+    ```
+2.  **安裝套件:**
+    ```bash
+    yarn add @craco/craco craco-cesium cesium resium
+    ```
+3.  **修改 `package.json`:**
+    ```json
+    {
+      "scripts": {
+        "start": "craco start",
+        "build": "craco build",
+        "test": "craco test"
+      }
+    }
+    ```
+4.  **建立 `craco.config.js`:**
+    ```javascript
+    module.exports = {
+      plugins: [
+        {
+          plugin: require("craco-cesium")()
+        }
+      ]
+    };
+    ```
 
-   ```bash
-   yarn create react-app project-name --template typescript
-   ```
-2. 安裝 craco resium
+### 使用 Vite
 
-   ```bash
-   yarn add @craco/craco craco-cesium cesium
-   ## 若採用 Resium 則新增
-   yarn add resium
-   ```
-3. 修改 package.json
+1.  **建立專案:**
+    ```bash
+    yarn create vite my-cesium-app --template react-ts
+    ```
+2.  **安裝套件:**
+    ```bash
+    yarn add cesium resium
+    yarn add --dev vite-plugin-cesium
+    ```
+3.  **修改 `vite.config.ts`:**
+    ```typescript
+    import { defineConfig } from 'vite';
+    import react from '@vitejs/plugin-react';
+    import cesium from 'vite-plugin-cesium';
 
-   ```json
-   {
-    // ...
-    "scripts": {
-      "start": "craco start", // react-scripts -> craco
-      "build": "craco build", // react-scripts -> craco
-      "test": "craco test",   // react-scripts -> craco
-      "eject": "react-scripts eject"
-    },
-    // ...
-   }
-   ```
-4. 建立 craco config
-
-   在根目錄建立 `craco.config.js`
-
-   ```javascript
-   module.exports = {
-     plugins: [
-       {
-         plugin: require("craco-cesium")()
-       }
-     ]
-   };
-   ```
-5. `yarn start `啟動專案
-
-
-### vite
-
-* 優點：速度快
-* 缺點：社群小，版本不穩定
-
-
-1. vite 建立 react ts 專案
-
-   ```bash
-   yarn create vite project-name
-   ```
-
-   選擇 `react` ➡️ `react-ts`
-2. 安裝 cesium、resium、必須插件
-
-   ```bash
-   yarn add cesium
-   yarn add --dev vite-plugin-cesium
-   
-   ## 若採用 Resium 則新增
-   yarn add resium
-   ```
-3. 完成
-
-<details><summary>優缺點</summary>
-<p>
-如果跳出 error <code>The requested module xxx does not provide an export named 'default'</code>
-
-可參考[此 issue](https://github.com/nshen/vite-plugin-cesium/issues/34)，將 cesium 版本降至 1.95.0 以下即可解決
-
-> **2022/08/18 vite-plugin-cesium@1.2.20 + cesium@1.95.0 可運作**
-
-</p>
-</details>
+    export default defineConfig({
+      plugins: [react(), cesium()],
+    });
+    ```

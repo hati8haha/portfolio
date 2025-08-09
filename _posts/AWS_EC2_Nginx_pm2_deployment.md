@@ -1,44 +1,94 @@
 ---
-title: AWS EC2 Nginx + pm2 完整部署流程
+title: AWS EC2 + Nginx + PM2 部署完整流程
+date: 2022-09-22 10:00:00
 tags:
-- 部屬
-- AWS
-- Nginx
+- aws
+- ec2
+- nginx
+- pm2
+- devops
 categories:
 - DevOps
+- 後端
 ---
 
-1. EC2 新建 instance
-2. 連線到 VPS
-3. 安裝 nginx
-   1. 防火牆設置
-4. 到 /var/www/ git clone 專案
-5. AWS RDS 新建 mysql 資料庫
-6. 專案中補上連線資料庫用的帳號密碼
-7. 安裝 node.js、npm
-8. 安裝 npm packages
-9. 安裝 sequelize-cli
-10. 執行 sequelize 建立資料庫、資料表
-    1. `sequelize db:create`
-    2. `sequelize db:migrate`
-11. 安裝 pm2
-12. 執行 pm2 `sudo pm2 start index.js`
-13. 到 /etc/nginx/sites-available 建立檔案 "example.com"
-    1. 檔案內容如下，修改域名與 port
-       ```
-       server {
-            listen       80;
-            server_name  example.com;
+本文將介紹如何將一個 Node.js 應用程式部署到 AWS EC2，並使用 Nginx 作為反向代理，以及 PM2 來管理 Node.js 行程。
 
-            # 把 request 轉給 localhost 的 5566 port
-            location / {
-              proxy_pass http://127.0.0.1:5566;
-            }
+## 1. 建立 EC2 Instance
+
+-   登入 AWS 主控台，並前往 EC2 服務。
+-   點擊「啟動執行個體」，並選擇一個您喜歡的 AMI (例如 Ubuntu Server)。
+-   選擇一個執行個體類型 (例如 `t2.micro`)。
+-   設定安全群組，確保允許來自您 IP 位址的 22 port (SSH) 和 80 port (HTTP) 的連線。
+-   啟動執行個體，並下載您的金鑰對 (`.pem` 檔案)。
+
+## 2. 連線到 EC2 Instance
+
+```bash
+ssh -i /path/to/your-key.pem ubuntu@your-ec2-ip
+```
+
+## 3. 安裝 Nginx
+
+```bash
+sudo apt update
+sudo apt install nginx
+```
+
+## 4. 部署您的應用程式
+
+```bash
+cd /var/www
+sudo git clone https://github.com/your/repo.git
+cd repo
+sudo npm install
+```
+
+## 5. 安裝和設定 PM2
+
+```bash
+sudo npm install -g pm2
+sudo pm2 start app.js
+```
+
+## 6. 設定 Nginx 反向代理
+
+1.  建立一個新的 Nginx 設定檔:
+
+    ```bash
+    sudo nano /etc/nginx/sites-available/your-domain.com
+    ```
+
+2.  在設定檔中加入以下內容:
+
+    ```nginx
+    server {
+        listen 80;
+        server_name your-domain.com;
+
+        location / {
+            proxy_pass http://localhost:3000; # 假設您的 Node.js 應用程式在 3000 port
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
         }
-        ```
-        參考自：[俄羅斯不愧是戰鬥民族：nginx
-](https://ithelp.ithome.com.tw/articles/10188498)
-14. 到 etc/nginx/sites-enabled 執行 `sudo ln -s /etc/nginx/sites-available/example /etc/nginx/sites-enabled/`，會建立連結檔案
-15. 重新載入 nginx `sudo systemctl reload nginx`
-16. 部署成功！
-`
+    }
+    ```
+
+3.  啟用您的設定檔:
+
+    ```bash
+    sudo ln -s /etc/nginx/sites-available/your-domain.com /etc/nginx/sites-enabled/
+    ```
+
+4.  重新啟動 Nginx:
+
+    ```bash
+    sudo systemctl restart nginx
+    ```
+
+## 7. 設定 DNS
+
+最後，到您的 DNS 供應商那裡，將您的網域指向您的 EC2 instance 的 IP 位址。

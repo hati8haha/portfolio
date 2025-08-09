@@ -1,4 +1,4 @@
-import { IconType } from "react-icons";
+import type { IconType } from "react-icons";
 import { AiOutlineCloudServer } from "react-icons/ai";
 import { FaHome, FaUbuntu } from "react-icons/fa";
 import { LiaInfinitySolid } from "react-icons/lia";
@@ -75,7 +75,19 @@ export type TechStackType =
   | "Apache Echarts"
   | "Cesium"
   | "Sequelize"
-  | "MySQL";
+  | "MySQL"
+  | "tailwindcss"
+  | "Astro.js"
+  | "Inertia.js"
+  | "CSS Modules"
+  | "Sass"
+  | "Framer Motion"
+  | "GraphQL"
+  | "React Query"
+  | "Next-Auth"
+  | "Vercel"
+  | "React Hook Form"
+
 
 export type LinkButton = {
   name: string;
@@ -88,6 +100,7 @@ export interface ProjectData {
   shortDescription: string;
   techStack: TechStackType[];
   description: string;
+  roles: string[];
   link?: LinkButton[];
 }
 
@@ -221,6 +234,125 @@ export const jobsData = [
 
 export const projects: ProjectData[] = [
   {
+    title: "ValleyDeer Survey System",
+    coverImage: "/valley-deer-survey-sys.webp",
+
+    shortDescription:
+      "Flexible Surveys, AI-Powered Reports 📊, and lightning-fast user experience — all in one seamless platform.",
+    description: `Reimagining surveys with elegance, speed, and intelligence! 🚀
+
+    Highlights ✨:
+
+    💡 AI-Driven Reports: Instantly transform survey responses into actionable insights.
+
+    🎨 Dynamic Theming: Flexible design system that adapts to your brand's style.
+
+    ⚡ Next.js Edge Performance: Ultra-fast response times for both admins and public participants.
+
+    🔐 Secure Access: Auth.js (Next-Auth) ensures robust authentication for every role.
+
+    📝 Smooth Form Handling: React Hook Form + Zod validation = error-free submissions.
+
+    📱 Beautiful & Intuitive UI: Powered by MUI with seamless layouts and responsive design.
+    
+    🌐 Deployed on Vercel for global speed and reliability. 🌈
+  `,
+    techStack: [
+      "React",
+      "Next.js",
+      "MUI",
+      "React Query",
+      "TypeScript",
+      "Next-Auth",
+      "Vercel",
+      "React Hook Form"
+    ],
+    roles: ["Frontend"],
+    images: [
+      "valley-deer-survey-sys-1.webp",
+      "valley-deer-survey-sys-2.webp",
+      "valley-deer-survey-sys-3.webp",
+      "valley-deer-survey-sys-4.webp",
+      "valley-deer-survey-sys.webp",
+
+    ],
+    link: [
+      {
+        name: "View Project",
+        link: "https://valleydeer-survey-sys"
+      }
+    ]
+  }
+  ,
+  {
+    title: "Mr. Watt Official Website",
+    coverImage: "/mrwatt-1.webp",
+    shortDescription:
+      "Taiwan’s green energy pioneer: sleek design, smooth animations 🎨⚡, and powerful SSR-driven experiences.",
+    description: `Powering a sustainable future with style and tech synergy! 🌱🚀
+
+    Highlights ✨:
+
+    🎯 Seamless SSR: Integrated with Inertia.js for fast, server-side rendered magic.
+
+    🎞️ Motion Mastery: Framer Motion brings buttery-smooth animations, from parallax video scrolls to SVG path artistry.
+
+    🖌️ Strong Design DNA: Modern layouts with CSS Modules + Sass for maintainable, scalable styling.
+
+    🔄 GraphQL Power: Dynamic data queries & mutations, perfectly tuned for a rich content experience.
+
+    🌏 Green Energy Leadership: Showcasing Mr. Watt — Taiwan’s first company dedicated to selling renewable energy and bridging the green electricity market.
+  `,
+    techStack: [
+      "React",
+      "Inertia.js",
+      "CSS Modules",
+      "Sass",
+      "Framer Motion",
+      "GraphQL"
+    ],
+    roles: ["Frontend Development"],
+    images: [
+      "mrwatt.webp",
+      "mrwatt-1.webp",
+      "mrwatt-2.webp",
+    ],
+    link: [
+      {
+        name: "View Project",
+        link: "https://mrwatt.com.tw"
+      }
+    ]
+  },
+  {
+    title: "Valleydeer Official Website",
+    coverImage: "/valleydeer-official.webp",
+    shortDescription:
+      "Blazing-fast ⚡, SEO-friendly 🌐, and ready to scale 🚀—boosting brand visibility and user delight.",
+    techStack: ["React", "Astro.js", "tailwindcss"],
+    roles: ["Full Stack Development"],
+    description: `Delivering speed, scalability, and style all in one package!
+
+      Features:
+      ⚡ Lightning Load Times: Powered by Astro.js for an ultra-fast, smooth browsing experience that keeps visitors engaged.
+      📈 SEO Optimized: Built with performance and search visibility in mind, helping the brand reach a wider audience.
+      📝 Easy Content Management: Integrated with a CMS so updating pages, blogs, or media is a breeze.
+      🏗️ Scalable Architecture: Designed to handle high traffic volumes without breaking a sweat.
+      🎯 Robust User Experience: Every click, scroll, and interaction fine-tuned for clarity and delight.
+
+      Impact:
+      The site’s high-speed performance and SEO optimization have boosted brand discoverability, drawing in more visitors and strengthening Valleydeer’s online presence.`,
+    images: [
+      "valleydeer-official.webp",
+      "valleydeer-official-1.webp",
+      "valleydeer-official-2.webp",
+      "valleydeer-official-3.webp",
+
+    ],
+    link: [{ name: "Visit website", link: "https://valleydeer.com" }]
+  },
+
+  {
     title: "Deer Donate",
     coverImage: "/deerdonate-donate.gif",
     shortDescription:
@@ -231,6 +363,7 @@ export const projects: ProjectData[] = [
       "Styled-components",
       "GCP (Google Cloud Platform)",
     ],
+    roles: ["Full Stack Development", "DevOps"],
     description: `Elevate your live streaming with a game-changing donation system!
 
       Features:
@@ -282,6 +415,7 @@ export const projects: ProjectData[] = [
       "Apache Echarts",
       "i18next",
     ],
+    roles: ["Full Stack Development", "DevOps"],
     images: [
       "sakut-console-login.png",
       "sakut-console-behavior1.gif",
@@ -310,6 +444,7 @@ export const projects: ProjectData[] = [
       "Jest",
       "Docker",
     ],
+    roles: ["Frontend Development", "DevOps"],
     images: ["nadi-soc1.png", "nadi-soc2.png", "nadi-soc3.png"],
     description: `An advanced membership platform, seamlessly integrating diverse SaaS services and sophisticated ordering systems. 🚀
 
@@ -337,6 +472,7 @@ Note: This project is currently deprecated due to external factors. `,
       "Cesium",
       "Jest",
     ],
+    roles: ["Frontend Development"],
     description: `Dive into the Geography Information Application Platform (GIAP) – your passport to a dynamic fusion of geo-info, 3D models, and visuals, all at your fingertips! 🗺️
 
     🏙️ 3D Urban Exploration: Immerse yourself in cities like never before. Walk through 3D model buildings, unravel architecture, and capture the vibe of bustling streets – all from your screen!
@@ -365,6 +501,7 @@ Note: This project is currently deprecated due to external factors. `,
       "Sequelize",
       "MySQL",
     ],
+    roles: ["Full Stack Development"],
     description: `Where food sharing meets advanced e-commerce. 🛒🍔🛍️
 
     Tech 🛠️: React + Redux Toolkit (Frontend) | Express + Sequelize (Backend)
@@ -406,6 +543,7 @@ Note: This project is currently deprecated due to external factors. `,
     shortDescription:
       "📱 Your go-to mobile app for tranquility. 🐾 3D animal models + 🌿 relaxing white noise = ultimate unwinding. 🌅",
     techStack: ["Flutter", "Dart"],
+    roles: ["Mobile Development", "UI/UX Design"],
     description: `Introducing WhiskerSoothe: Your Pocket Relaxation Oasis
 
 🐾 Discover Tranquility: Immerse in a world of interactive 3D animal models and soothing white noise sounds with WhiskerSoothe, the ultimate relaxation app.

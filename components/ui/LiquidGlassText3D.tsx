@@ -430,12 +430,12 @@ export default function LiquidGlassText3D({
 
 			context.clearRect(0, 0, canvas.width, canvas.height);
 			context.fillText(
-				"Frontend Developer",
+				"Full-Stack Developer",
 				canvas.width / 2,
 				canvas.height * 0.3,
 			);
 			context.font = `bold ${fontSize * 0.75}px Arial, sans-serif`;
-			context.fillText("& UI Engineer", canvas.width / 2, canvas.height * 0.7);
+			context.fillText("& Product Builder", canvas.width / 2, canvas.height * 0.7);
 
 			const texture = new THREE.CanvasTexture(canvas);
 			texture.needsUpdate = true;
@@ -486,7 +486,7 @@ export default function LiquidGlassText3D({
 				const curveSegments = quality === "low" ? 6 : 12;
 				const bevelSegments = quality === "low" ? 3 : 5;
 
-				const line1Geometry = new TextGeometry("Frontend Developer", {
+				const line1Geometry = new TextGeometry("Full-Stack Developer", {
 					font: font,
 					size: responsiveConfig.textSize.line1,
 					depth: 0.3,
@@ -498,7 +498,7 @@ export default function LiquidGlassText3D({
 					bevelSegments,
 				});
 
-				const line2Geometry = new TextGeometry("& UI Engineer", {
+				const line2Geometry = new TextGeometry("& Product Builder", {
 					font: font,
 					size: responsiveConfig.textSize.line2,
 					depth: 0.25,
@@ -892,7 +892,7 @@ export default function LiquidGlassText3D({
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
 			role="img"
-			aria-label="Interactive 3D text: Frontend Developer & UI Engineer"
+			aria-label="Interactive 3D text: Full-Stack Developer & Product Builder"
 			style={{
 				background: "transparent",
 				overflow: "hidden",

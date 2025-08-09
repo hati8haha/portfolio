@@ -1,5 +1,5 @@
-// import styles from './post.module.css'
 import { getPostById, getAllPosts } from "@/lib/api";
+import Link from "next/link";
 
 // Generate the post, note that this is a "react server component"! it is
 // allowed to be async
@@ -10,15 +10,53 @@ export default async function Post({
 }) {
   const { html, title, date } = await getPostById(id);
   return (
-    <main
-      className={`px-8 py-16 flex flex-col w-screen items-center xs:px-24 `}
-    >
-      <article className="xl:max-w-3xl max-w-8/12">
-        <h1 className="text-3xl font-bold mb-4">{title}</h1>
-        {date && date !== "undefined" && <h4>{date}</h4>}
-        <div dangerouslySetInnerHTML={{ __html: html }} />
-      </article>
-    </main>
+    <div className="min-h-screen">
+      <div className="max-w-[1220px] mx-auto px-6 py-12">
+        {/* Header */}
+        <header className="mb-8">
+          <Link 
+            href="/posts" 
+            className="inline-flex items-center gap-3 mb-6 text-[var(--muted)] hover:text-white transition-colors no-underline"
+          >
+            <span>←</span> Back to Blog
+          </Link>
+        </header>
+
+        <main>
+          <article className="liquid-glass p-8 max-w-4xl mx-auto">
+            <header className="mb-8">
+              <h1 className="text-4xl font-bold gradient-text mb-4">{title}</h1>
+              {date && date !== "undefined" && (
+                <time className="chip">
+                  {new Date(date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </time>
+              )}
+            </header>
+            
+            <div 
+              className="prose prose-invert prose-lg max-w-none
+                         prose-headings:gradient-text prose-headings:font-bold
+                         prose-p:text-[var(--muted)] prose-p:leading-relaxed
+                         prose-a:text-[var(--accent-a)] prose-a:no-underline hover:prose-a:text-[var(--accent-b)]
+                         prose-code:bg-white/10 prose-code:px-2 prose-code:py-1 prose-code:rounded
+                         prose-pre:bg-white/5 prose-pre:border prose-pre:border-white/10 prose-pre:rounded-lg
+                         prose-blockquote:border-l-[var(--accent-a)] prose-blockquote:border-l-4 prose-blockquote:pl-6
+                         prose-ul:text-[var(--muted)] prose-ol:text-[var(--muted)]
+                         prose-li:text-[var(--muted)]" 
+              dangerouslySetInnerHTML={{ __html: html }} 
+            />
+          </article>
+        </main>
+
+        <footer className="mt-12 mb-3 text-center text-[var(--muted)] text-sm">
+          Made with Liquid Glass principles — Article 2024
+        </footer>
+      </div>
+    </div>
   );
 }
 

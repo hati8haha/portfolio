@@ -15,3 +15,8 @@ export interface ProjectModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
+export interface Skill {
+  skill: string;
+  level: number;
+}

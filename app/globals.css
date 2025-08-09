@@ -94,6 +94,50 @@ body {
   }
 }
 
+/* Glass Button Styles */
+.glass-button {
+  @apply px-6 py-3 text-white font-medium rounded-xl transition-all duration-300;
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+
+.glass-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+  border-color: rgba(255,255,255,0.15);
+}
+
+.glass-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.glass-button-primary {
+  background: linear-gradient(135deg, var(--accent-a), var(--accent-b));
+  border: 1px solid rgba(255,255,255,0.2);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+.glass-button-primary:hover {
+  background: linear-gradient(135deg, var(--accent-a), var(--accent-b));
+  filter: brightness(1.1);
+  box-shadow: 0 8px 32px rgba(var(--accent-a-rgb), 0.3);
+}
+
+.glass-button-secondary {
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.8);
+}
+
+.glass-button-secondary:hover {
+  background: linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.04));
+  color: rgba(255,255,255,0.9);
+}
+
 /* Utility classes for better performance */
 .line-clamp-2 {
   display: -webkit-box;

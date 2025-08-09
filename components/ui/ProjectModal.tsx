@@ -61,6 +61,7 @@ export default function ProjectModal({ project, isOpen, onClose }: ProjectModalP
               >
                 {/* Close button */}
                 <button 
+                  type="button"
                   onClick={onClose}
                   className="absolute right-4 top-4 z-30 bg-black/50 hover:bg-black/70 text-white/70 hover:text-white px-3 py-2 rounded-lg transition-all duration-200 font-medium text-sm"
                 >

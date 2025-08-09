@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getAllPosts } from "@/lib/api";
+import { Footer } from "@/components/sections";
 
 export default async function Page() {
   const posts = await getAllPosts();
@@ -61,9 +62,7 @@ export default async function Page() {
           </section>
         </main>
 
-        <footer className="mt-12 mb-3 text-center text-[var(--muted)] text-sm">
-          Made with Liquid Glass principles — Blog 2024
-        </footer>
+        <Footer />
       </div>
     </div>
   );

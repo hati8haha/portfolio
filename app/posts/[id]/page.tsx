@@ -1,3 +1,4 @@
+import { Footer } from "@/components/sections";
 import { getPostById, getAllPosts } from "@/lib/api";
 import Link from "next/link";
 
@@ -52,9 +53,7 @@ export default async function Post({
           </article>
         </main>
 
-        <footer className="mt-12 mb-3 text-center text-[var(--muted)] text-sm">
-          Made with Liquid Glass principles — Article 2024
-        </footer>
+      <Footer />
       </div>
     </div>
   );

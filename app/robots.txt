@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://www.hao-ting.com/sitemap.xml
+
+# Crawl delay (optional)
+Crawl-delay: 1

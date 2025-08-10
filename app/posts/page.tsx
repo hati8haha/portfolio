@@ -1,6 +1,36 @@
 import Link from "next/link";
 import { getAllPosts } from "@/lib/api";
 import { Footer } from "@/components/sections";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Blog",
+  description: "Full-stack development insights, web technologies, and creative coding tutorials by Haoting Cheng. Learn about React, Next.js, Node.js, JavaScript, and modern web development practices.",
+  keywords: [
+    'Full-Stack Development Blog',
+    'React Tutorials',
+    'Next.js Guide',
+    'Node.js Tips',
+    'JavaScript Tips',
+    'Backend Development',
+    'Frontend Development',
+    'Web Development',
+    'Coding Blog',
+    'Tech Articles'
+  ],
+  openGraph: {
+    title: "Blog | Haoting Cheng",
+    description: "Full-stack development insights, web technologies, and creative coding tutorials",
+    type: "website",
+    images: ['/site-cover.webp']
+  },
+  twitter: {
+    title: "Blog | Haoting Cheng",
+    description: "Full-stack development insights, web technologies, and creative coding tutorials",
+    card: 'summary_large_image',
+    images: ['/site-cover.webp']
+  }
+};
 
 export default async function Page() {
   const posts = await getAllPosts();
@@ -20,7 +50,7 @@ export default async function Page() {
             My Blog
           </h1>
           <p className="text-[var(--muted)] text-lg">
-            Thoughts on frontend development, web technologies, and creative coding
+            Thoughts on full-stack development, web technologies, and creative coding
           </p>
         </header>
 

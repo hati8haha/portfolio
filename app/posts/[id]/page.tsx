@@ -10,8 +10,39 @@ export default async function Post({
   params: { id: string };
 }) {
   const { html, title, date } = await getPostById(id);
+  const baseUrl = 'https://www.hao-ting.com'; // Update with your actual domain
+  
+  // Structured data for blog post
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": title,
+    "datePublished": date,
+    "dateModified": date,
+    "author": {
+      "@type": "Person",
+      "name": "Haoting Cheng",
+      "url": baseUrl
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "Haoting Cheng"
+    },
+    "url": `${baseUrl}/posts/${id}`,
+    "image": `${baseUrl}/site-cover.webp`,
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `${baseUrl}/posts/${id}`
+    }
+  };
+
   return (
     <div className="min-h-screen">
+      <script
+        type="application/ld+json"
+      >
+      {JSON.stringify(structuredData)}
+      </ script>
       <div className="max-w-[1220px] mx-auto px-6 py-12">
         {/* Header */}
         <header className="mb-8">
@@ -77,8 +108,45 @@ export async function generateMetadata({
 }: {
   params: { id: string };
 }) {
-  const { title } = await getPostById(id);
+  const { title, date } = await getPostById(id);
+  const baseUrl = 'https://www.hao-ting.com'; // Update with your actual domain
+  
   return {
     title,
+    description: `Read about ${title} - Full-stack development insights and tutorials by Haoting Cheng`,
+    keywords: [
+      'Full-Stack Development',
+      'Web Development Tutorial',
+      'React',
+      'Next.js',
+      'Node.js',
+      'JavaScript',
+      'Backend Development',
+      'Frontend Development',
+      'Programming Blog'
+    ],
+    authors: [{ name: 'Haoting Cheng' }],
+    alternates: {
+      canonical: `${baseUrl}/posts/${id}`,
+    },
+    openGraph: {
+      title,
+      description: `Read about ${title} - Full-stack development insights and tutorials`,
+      type: 'article',
+      publishedTime: date,
+      authors: ['Haoting Cheng'],
+      url: `${baseUrl}/posts/${id}`,
+      images: ['/site-cover.webp']
+    },
+    twitter: {
+      title,
+      description: `Read about ${title} - Full-stack development insights and tutorials`,
+      card: 'summary_large_image',
+      images: ['/site-cover.webp']
+    },
+    robots: {
+      index: true,
+      follow: true,
+    }
   };
 }

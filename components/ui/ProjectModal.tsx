@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import type { ProjectModalProps } from "@/types";
 import OptimizedImageCarousel from "./OptimizedImageCarousel";
 
@@ -10,6 +10,8 @@ export default function ProjectModal({
 	isOpen,
 	onClose,
 }: ProjectModalProps) {
+	const scrollRef = useRef<HTMLDivElement>(null);
+
 	// Memoize carousel images to prevent recreation on every render
 	const carouselImages = useMemo(() => {
 		if (!project) return [];
@@ -35,6 +37,11 @@ export default function ProjectModal({
 				"--animation-performance",
 				"paused",
 			);
+
+			// Optimize scroll performance
+			if (scrollRef.current) {
+				scrollRef.current.style.contain = "layout style paint";
+			}
 		} else {
 			document.body.style.overflow = "";
 			document.body.classList.remove("modal-open");
@@ -70,9 +77,8 @@ export default function ProjectModal({
 					animate={{ opacity: 1 }}
 					exit={{ opacity: 0 }}
 					transition={{ duration: 0.15, ease: "easeOut" }}
-					className="fixed inset-0 z-50 bg-black/60"
+					className="fixed inset-0 z-50 bg-black/60 modal-backdrop"
 					onClick={onClose}
-					style={{ backdropFilter: "blur(8px)" }}
 				>
 					<div className="fixed inset-0 overflow-y-auto">
 						<div className="flex min-h-full items-center justify-center p-4">
@@ -81,12 +87,8 @@ export default function ProjectModal({
 								animate={{ scale: 1, opacity: 1 }}
 								exit={{ scale: 0.98, opacity: 0 }}
 								transition={{ duration: 0.15, ease: "easeOut" }}
-								className="relative w-full max-w-6xl bg-black/40 border border-white/10 rounded-2xl overflow-hidden shadow-2xl will-change-transform"
+								className="relative w-full max-w-6xl modal-content modal-glass rounded-2xl overflow-hidden shadow-2xl"
 								onClick={(e) => e.stopPropagation()}
-								style={{
-									backdropFilter: "blur(12px)",
-									transform: "translateZ(0)", // Force hardware acceleration
-								}}
 							>
 								{/* Close button */}
 								<button
@@ -99,8 +101,8 @@ export default function ProjectModal({
 
 								{/* Content Container with optimized scroll */}
 								<div
-									className="max-h-[90vh] overflow-y-auto"
-									style={{ scrollBehavior: "smooth" }}
+									ref={scrollRef}
+									className="max-h-[90vh] overflow-y-auto modal-scroll"
 								>
 									<div className="p-6 md:p-8">
 										{/* Header */}
@@ -129,10 +131,7 @@ export default function ProjectModal({
 													<h3 className="text-xl font-bold text-white mb-4">
 														Project Details
 													</h3>
-													<div
-														className="max-h-96 overflow-y-auto pr-2"
-														style={{ scrollBehavior: "smooth" }}
-													>
+													<div className="max-h-96 overflow-y-auto pr-2 custom-scrollbar">
 														<div
 															className="prose prose-invert prose-sm md:prose-base max-w-none
                                          prose-headings:text-white prose-headings:font-semibold prose-headings:mb-3
@@ -144,6 +143,7 @@ export default function ProjectModal({
                                          prose-ul:text-gray-300 prose-ol:text-gray-300
                                          prose-li:text-gray-300 prose-li:mb-1
                                          prose-strong:text-white prose-strong:font-semibold whitespace-pre-line"
+															style={{ contain: "layout style" }}
 														>
 															{project.longDescription}
 														</div>

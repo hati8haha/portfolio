@@ -11,16 +11,16 @@ interface CarouselProps {
 	className?: string;
 }
 
-// Optimized transition variants
+// Optimized transition variants for better performance
 const slideVariants = {
-	enter: { opacity: 0, scale: 1.02 },
-	center: { opacity: 1, scale: 1 },
-	exit: { opacity: 0, scale: 0.98 },
+	enter: { opacity: 0 },
+	center: { opacity: 1 },
+	exit: { opacity: 0 },
 };
 
 const transition = {
-	duration: 0.3,
-	ease: "easeInOut",
+	duration: 0.2,
+	ease: "easeOut",
 };
 
 export default function OptimizedImageCarousel({
@@ -63,7 +63,7 @@ export default function OptimizedImageCarousel({
 	return (
 		<div className={`relative w-full h-full ${className}`}>
 			{/* Main image container with optimized rendering */}
-			<div className="relative w-full h-full overflow-hidden rounded-xl bg-gray-900">
+			<div className="relative w-full h-full overflow-hidden rounded-xl bg-gray-900" style={{ contain: "layout style paint" }}>
 				<AnimatePresence mode="wait">
 					<motion.div
 						key={currentIndex}
@@ -73,7 +73,11 @@ export default function OptimizedImageCarousel({
 						exit="exit"
 						transition={transition}
 						className="absolute inset-0"
-						style={{ willChange: "opacity, transform" }}
+						style={{ 
+							willChange: "opacity", 
+							contain: "layout style paint",
+							transform: "translateZ(0)"
+						}}
 					>
 						<Image
 							src={currentImage}

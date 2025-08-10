@@ -54,6 +54,17 @@ const getResponsiveConfig = () => {
 
 	const width = window.innerWidth;
 
+		if (width < 400) {
+		// Mobile
+		return {
+			textSize: { line1: 2.0, line2: 1.6 },
+			scale: 0.7,
+			containerHeight: "16rem",
+			cameraDistance: 18,
+			fallbackFontSize: 64,
+		};
+	}
+
 	if (width < 640) {
 		// Mobile
 		return {
@@ -123,19 +134,32 @@ const useIntersectionObserver = (
 		const element = elementRef.current;
 		if (!element) return;
 
+		// Use a stable threshold to prevent flickering on mobile
+		const stableThreshold = Math.max(threshold, 0.05);
+
 		const observer = new IntersectionObserver(
 			([entry]) => {
-				setIsIntersecting(entry.isIntersecting);
-				if (entry.isIntersecting && !hasIntersected) {
+				// Add hysteresis to prevent rapid toggling
+				const wasIntersecting = isIntersecting;
+				const nowIntersecting = entry.intersectionRatio > stableThreshold;
+				
+				if (nowIntersecting !== wasIntersecting) {
+					setIsIntersecting(nowIntersecting);
+				}
+				
+				if (nowIntersecting && !hasIntersected) {
 					setHasIntersected(true);
 				}
 			},
-			{ threshold },
+			{ 
+				threshold: [0, stableThreshold, stableThreshold + 0.1],
+				rootMargin: '10px' // Add some margin to reduce sensitivity
+			},
 		);
 
 		observer.observe(element);
 		return () => observer.disconnect();
-	}, [elementRef, hasIntersected, threshold]);
+	}, [elementRef, hasIntersected, threshold, isIntersecting]);
 
 	return { isIntersecting, hasIntersected };
 };
@@ -154,9 +178,10 @@ export default function LiquidGlassText3D({
 		0.1,
 	);
 	const performanceConfig = useRef(getPerformanceConfig());
-	const [responsiveConfig, setResponsiveConfig] = useState(
-		getResponsiveConfig(),
-	);
+	
+	// Use a ref to store responsive config to prevent unnecessary re-renders
+	const responsiveConfigRef = useRef(getResponsiveConfig());
+	const [responsiveConfig, setResponsiveConfig] = useState(() => getResponsiveConfig());
 
 	const sceneRef = useRef<{
 		scene?: THREE.Scene;
@@ -683,9 +708,15 @@ export default function LiquidGlassText3D({
 
 	const initThreeJS = useCallback(async () => {
 		if (!containerRef.current || !hasIntersected) return;
+		
+		// Prevent re-initialization if already initialized
+		if (sceneRef.current.scene) return;
 
 		const container = containerRef.current;
 		const rect = container.getBoundingClientRect();
+		
+		// Get responsive config at initialization time to avoid dependencies
+		const currentResponsiveConfig = getResponsiveConfig();
 
 		const scene = new THREE.Scene();
 		const camera = new THREE.PerspectiveCamera(
@@ -712,7 +743,7 @@ export default function LiquidGlassText3D({
 		container.appendChild(renderer.domElement);
 
 		const clock = new THREE.Clock();
-		camera.position.z = responsiveConfig.cameraDistance;
+		camera.position.z = currentResponsiveConfig.cameraDistance;
 		camera.position.y = 0;
 
 		sceneRef.current = {
@@ -749,7 +780,6 @@ export default function LiquidGlassText3D({
 		createFallbackText,
 		startFadeInAnimation,
 		hasIntersected,
-		responsiveConfig,
 	]);
 
 	const cleanup = useCallback(() => {
@@ -788,6 +818,9 @@ export default function LiquidGlassText3D({
 				}
 			});
 		}
+		
+		// Reset scene ref to allow re-initialization if needed
+		sceneRef.current = {};
 	}, []);
 
 	const handleMouseMove = useCallback(
@@ -838,7 +871,12 @@ export default function LiquidGlassText3D({
 
 			// Update responsive config based on new window size
 			const newResponsiveConfig = getResponsiveConfig();
-			setResponsiveConfig(newResponsiveConfig);
+			responsiveConfigRef.current = newResponsiveConfig;
+			
+			// Only update state if we're not already in the middle of initialization
+			if (sceneRef.current.scene && fadeProgressRef.current > 0) {
+				setResponsiveConfig(newResponsiveConfig);
+			}
 
 			const rect = containerRef.current.getBoundingClientRect();
 			sceneRef.current.camera.aspect = rect.width / rect.height;
@@ -856,6 +894,9 @@ export default function LiquidGlassText3D({
 	// Initialize only when component becomes visible
 	useEffect(() => {
 		if (!hasIntersected || typeof window === "undefined") return;
+		
+		// Prevent re-initialization if already initialized
+		if (sceneRef.current.scene) return;
 
 		const timeoutId = setTimeout(() => {
 			initThreeJS();
@@ -863,9 +904,15 @@ export default function LiquidGlassText3D({
 
 		return () => {
 			clearTimeout(timeoutId);
+		};
+	}, [hasIntersected, initThreeJS]); // Include initThreeJS but it's stable now
+	
+	// Separate cleanup effect
+	useEffect(() => {
+		return () => {
 			cleanup();
 		};
-	}, [initThreeJS, cleanup, hasIntersected]); // Removed responsiveConfig dependency to prevent re-initialization
+	}, [cleanup]); // Include cleanup dependency
 
 	useEffect(() => {
 		const handleResizeEvent = () => handleResize();
@@ -877,11 +924,27 @@ export default function LiquidGlassText3D({
 	useEffect(() => {
 		if (!sceneRef.current.clock) return;
 
-		if (isIntersecting) {
+		if (isIntersecting && document.visibilityState === 'visible') {
 			sceneRef.current.clock.start();
 		} else {
 			sceneRef.current.clock.stop();
 		}
+	}, [isIntersecting]);
+
+	// Handle page visibility change to pause animations when tab is not visible
+	useEffect(() => {
+		const handleVisibilityChange = () => {
+			if (!sceneRef.current.clock) return;
+			
+			if (document.visibilityState === 'hidden') {
+				sceneRef.current.clock.stop();
+			} else if (isIntersecting) {
+				sceneRef.current.clock.start();
+			}
+		};
+
+		document.addEventListener('visibilitychange', handleVisibilityChange);
+		return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
 	}, [isIntersecting]);
 
 	return (

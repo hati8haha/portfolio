@@ -1,22 +1,19 @@
 // Re-export the main component
-export { default } from '../LiquidGlass';
-
+export { default } from "../LiquidGlass";
+// Export configuration for customization
+export { LIQUID_GLASS_CONFIG, PERFORMANCE_SETTINGS } from "./config";
 // Export types for external use
 export type {
-  LiquidGlassProps,
-  SceneElements,
-  RenderSettings,
-  DeviceCapabilities,
-  QualityLevel,
-} from './types';
-
+	DeviceCapabilities,
+	LiquidGlassProps,
+	QualityLevel,
+	RenderSettings,
+	SceneElements,
+} from "./types";
 // Export utilities for advanced usage
 export {
-  detectDeviceCapabilities,
-  getOptimalRenderSettings,
-  prefersReducedMotion,
-  PerformanceMonitor,
-} from './utils';
-
-// Export configuration for customization
-export { LIQUID_GLASS_CONFIG, PERFORMANCE_SETTINGS } from './config';
+	detectDeviceCapabilities,
+	getOptimalRenderSettings,
+	PerformanceMonitor,
+	prefersReducedMotion,
+} from "./utils";

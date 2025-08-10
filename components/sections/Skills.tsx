@@ -1,9 +1,9 @@
 "use client";
 
-import SkillsPuzzleGame from './SkillsPuzzleGame';
+import SkillsPuzzleGame from "./SkillsPuzzleGame";
 
 const Skills = () => {
-  return <SkillsPuzzleGame />;
+	return <SkillsPuzzleGame />;
 };
 
 export default Skills;

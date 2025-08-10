@@ -54,7 +54,7 @@ const getResponsiveConfig = () => {
 
 	const width = window.innerWidth;
 
-		if (width < 400) {
+	if (width < 400) {
 		// Mobile
 		return {
 			textSize: { line1: 2.0, line2: 1.6 },
@@ -142,18 +142,18 @@ const useIntersectionObserver = (
 				// Add hysteresis to prevent rapid toggling
 				const wasIntersecting = isIntersecting;
 				const nowIntersecting = entry.intersectionRatio > stableThreshold;
-				
+
 				if (nowIntersecting !== wasIntersecting) {
 					setIsIntersecting(nowIntersecting);
 				}
-				
+
 				if (nowIntersecting && !hasIntersected) {
 					setHasIntersected(true);
 				}
 			},
-			{ 
+			{
 				threshold: [0, stableThreshold, stableThreshold + 0.1],
-				rootMargin: '10px' // Add some margin to reduce sensitivity
+				rootMargin: "10px", // Add some margin to reduce sensitivity
 			},
 		);
 
@@ -178,10 +178,12 @@ export default function LiquidGlassText3D({
 		0.1,
 	);
 	const performanceConfig = useRef(getPerformanceConfig());
-	
+
 	// Use a ref to store responsive config to prevent unnecessary re-renders
 	const responsiveConfigRef = useRef(getResponsiveConfig());
-	const [responsiveConfig, setResponsiveConfig] = useState(() => getResponsiveConfig());
+	const [responsiveConfig, setResponsiveConfig] = useState(() =>
+		getResponsiveConfig(),
+	);
 
 	const sceneRef = useRef<{
 		scene?: THREE.Scene;
@@ -460,7 +462,11 @@ export default function LiquidGlassText3D({
 				canvas.height * 0.3,
 			);
 			context.font = `bold ${fontSize * 0.75}px Arial, sans-serif`;
-			context.fillText("& Product Builder", canvas.width / 2, canvas.height * 0.7);
+			context.fillText(
+				"& Product Builder",
+				canvas.width / 2,
+				canvas.height * 0.7,
+			);
 
 			const texture = new THREE.CanvasTexture(canvas);
 			texture.needsUpdate = true;
@@ -708,13 +714,13 @@ export default function LiquidGlassText3D({
 
 	const initThreeJS = useCallback(async () => {
 		if (!containerRef.current || !hasIntersected) return;
-		
+
 		// Prevent re-initialization if already initialized
 		if (sceneRef.current.scene) return;
 
 		const container = containerRef.current;
 		const rect = container.getBoundingClientRect();
-		
+
 		// Get responsive config at initialization time to avoid dependencies
 		const currentResponsiveConfig = getResponsiveConfig();
 
@@ -818,7 +824,7 @@ export default function LiquidGlassText3D({
 				}
 			});
 		}
-		
+
 		// Reset scene ref to allow re-initialization if needed
 		sceneRef.current = {};
 	}, []);
@@ -872,7 +878,7 @@ export default function LiquidGlassText3D({
 			// Update responsive config based on new window size
 			const newResponsiveConfig = getResponsiveConfig();
 			responsiveConfigRef.current = newResponsiveConfig;
-			
+
 			// Only update state if we're not already in the middle of initialization
 			if (sceneRef.current.scene && fadeProgressRef.current > 0) {
 				setResponsiveConfig(newResponsiveConfig);
@@ -894,7 +900,7 @@ export default function LiquidGlassText3D({
 	// Initialize only when component becomes visible
 	useEffect(() => {
 		if (!hasIntersected || typeof window === "undefined") return;
-		
+
 		// Prevent re-initialization if already initialized
 		if (sceneRef.current.scene) return;
 
@@ -906,7 +912,7 @@ export default function LiquidGlassText3D({
 			clearTimeout(timeoutId);
 		};
 	}, [hasIntersected, initThreeJS]); // Include initThreeJS but it's stable now
-	
+
 	// Separate cleanup effect
 	useEffect(() => {
 		return () => {
@@ -924,7 +930,7 @@ export default function LiquidGlassText3D({
 	useEffect(() => {
 		if (!sceneRef.current.clock) return;
 
-		if (isIntersecting && document.visibilityState === 'visible') {
+		if (isIntersecting && document.visibilityState === "visible") {
 			sceneRef.current.clock.start();
 		} else {
 			sceneRef.current.clock.stop();
@@ -935,16 +941,17 @@ export default function LiquidGlassText3D({
 	useEffect(() => {
 		const handleVisibilityChange = () => {
 			if (!sceneRef.current.clock) return;
-			
-			if (document.visibilityState === 'hidden') {
+
+			if (document.visibilityState === "hidden") {
 				sceneRef.current.clock.stop();
 			} else if (isIntersecting) {
 				sceneRef.current.clock.start();
 			}
 		};
 
-		document.addEventListener('visibilitychange', handleVisibilityChange);
-		return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+		document.addEventListener("visibilitychange", handleVisibilityChange);
+		return () =>
+			document.removeEventListener("visibilitychange", handleVisibilityChange);
 	}, [isIntersecting]);
 
 	return (

@@ -245,6 +245,17 @@ export function useRenderLoop() {
         return;
       }
       
+      // Check if animations should be paused (for modal performance)
+      const animationState = document.documentElement.style.getPropertyValue('--animation-performance');
+      const shouldPause = animationState === 'paused' || document.body.classList.contains('modal-open');
+      
+      if (shouldPause) {
+        // Render one frame but don't update animations
+        sceneRef.current.renderer.render(sceneRef.current.scene, sceneRef.current.camera);
+        sceneRef.current.animId = requestAnimationFrame(renderLoop);
+        return;
+      }
+      
       const t = timestamp * 0.001;
       sceneRef.current.time = t;
       frameCountRef.current++;

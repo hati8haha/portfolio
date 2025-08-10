@@ -17,6 +17,7 @@
   --max-w: 1220px;
   --ease: cubic-bezier(.2,.9,.28,1);
   scroll-behavior: smooth;
+  --animation-performance: running;
 }
 
 * {
@@ -37,6 +38,16 @@ body {
   overflow-y: overlay;
 }
 
+/* Performance optimizations */
+.modal-open {
+  --animation-performance: paused;
+}
+
+.modal-open * {
+  animation-play-state: var(--animation-performance);
+}
+
+/* Optimize liquid glass for better performance */
 .liquid-glass {
   background: linear-gradient(180deg, rgba(255,255,255,0.012), rgba(255,255,255,0.006));
   border: 1px solid rgba(255,255,255,0.03);
@@ -45,6 +56,8 @@ body {
   position: relative;
   overflow: hidden;
   box-shadow: 0 22px 70px rgba(1,6,15,0.5);
+  will-change: auto; /* Only change when needed */
+  contain: layout style paint; /* Optimize repaints */
 }
 
 .liquid-glass::before {

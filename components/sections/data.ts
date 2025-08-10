@@ -211,7 +211,7 @@ export const jobsData = [
       "• Created a Discord bot to boost streamer-fan interaction.",
       "• Played a key role in optimizing frontend and backend architecture and database design.",
     ],
-    image: "/valleydeer-company-logo.png",
+    image: "/valleydeer-company-logo.webp",
     companyLink: "https://deerdonate.herokuapp.com/",
   },
   {
@@ -227,7 +227,7 @@ export const jobsData = [
       "• Migrated legacy projects to Next.js, MUI and Docker, resulting in faster page load times and an enhanced user experience.",
       "• Implemented pre-commit hooks (Prettier, commitlint) for consistent code style and enhanced collaboration within the team.",
     ],
-    image: "/nadi-company-logo.png",
+    image: "/nadi-company-logo.webp",
     companyLink: "string",
   },
 ];
@@ -380,9 +380,9 @@ export const projects: ProjectData[] = [
       "deerdonate-gift.webp",
       "deerdonate-donate.gif",
       "deerdonate-notification.webp",
-      "deerdonate-demo1.png",
+      "deerdonate-demo1.webp",
       "deerdonate-demo2.gif",
-      "deerdonate-feature1.png",
+      "deerdonate-feature1.webp",
     ],
     link: [{ name: "View Project", link: "https://deerdonate.herokuapp.com/" }],
   },
@@ -417,7 +417,7 @@ export const projects: ProjectData[] = [
     ],
     roles: ["Full Stack Development", "DevOps"],
     images: [
-      "sakut-console-login.png",
+      "sakut-console-login.webp",
       "sakut-console-behavior1.gif",
       "sakut-console-behavior2.gif",
       "sakut-console-table2.gif",
@@ -431,7 +431,7 @@ export const projects: ProjectData[] = [
   },
   {
     title: "NADI Membership platform",
-    coverImage: "/nadi-soc1.png",
+    coverImage: "/nadi-soc1.webp",
     shortDescription:
       "An internationalization membership platform 🌍 designed to integrate diverse SaaS services ☁️ and ordering systems.",
     techStack: [
@@ -445,7 +445,7 @@ export const projects: ProjectData[] = [
       "Docker",
     ],
     roles: ["Frontend Development", "DevOps"],
-    images: ["nadi-soc1.png", "nadi-soc2.png", "nadi-soc3.png"],
+    images: ["nadi-soc1.webp", "nadi-soc2.webp", "nadi-soc3.webp"],
     description: `An advanced membership platform, seamlessly integrating diverse SaaS services and sophisticated ordering systems. 🚀
 
 🌍 Unified Services: Unite Geographic Information Application and Building Information Modeling Platforms in one digital hub.
@@ -460,7 +460,7 @@ Note: This project is currently deprecated due to external factors. `,
   },
   {
     title: "Geography Information Application Platform",
-    coverImage: "/giap-demo1.png",
+    coverImage: "/giap-demo1.webp",
     shortDescription:
       "Blending geo-info 🗺️, 3D models 🏬, and visuals into an intuitive platform that gives you a city or global scope at your fingertips. 🌍",
     techStack: [
@@ -485,11 +485,11 @@ Note: This project is currently deprecated due to external factors. `,
     
     Note: This project is currently deprecated due to external factors. 
     `,
-    images: ["giap-demo1.png", "GIAP.gif"],
+    images: ["giap-demo1.webp", "GIAP.gif"],
   },
   {
     title: "Meal Time",
-    coverImage: "/meal-time-demo.png",
+    coverImage: "/meal-time-demo.webp",
     shortDescription:
       "Turning surplus into supper! 🍽️ A platform gives excess food a comeback, serving meals over waste. 🌱",
     techStack: [
@@ -519,15 +519,15 @@ Note: This project is currently deprecated due to external factors. `,
     
     Join Meal Time's tech-driven movement for greener, efficient food sharing 🌱🚀🍽️`,
     images: [
-      "meal-time-demo.png",
-      "meal-time-demo3.png",
-      "meal-time-demo2.png",
-      "meal-time-demo1.png",
-      "meal-time-demo4.png",
-      "meal-time-demo5.png",
-      "meal-time-demo6.png",
-      "meal-time-demo7.png",
-      "meal-time-demo8.png",
+      "meal-time-demo.webp",
+      "meal-time-demo3.webp",
+      "meal-time-demo2.webp",
+      "meal-time-demo1.webp",
+      "meal-time-demo4.webp",
+      "meal-time-demo5.webp",
+      "meal-time-demo6.webp",
+      "meal-time-demo7.webp",
+      "meal-time-demo8.webp",
     ],
     link: [
       { name: "GitHub (FE)", link: "https://github.com/pcchen95/meal-time" },
